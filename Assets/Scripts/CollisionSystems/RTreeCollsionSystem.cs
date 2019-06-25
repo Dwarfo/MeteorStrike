@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class RTreeCollsionSystem : MonoBehaviour, ICollisionSystem
 {
-    public void Delete(INode node, AABB obj)
+
+    public void Delete(GameObject obj)
     {
         throw new System.NotImplementedException();
     }

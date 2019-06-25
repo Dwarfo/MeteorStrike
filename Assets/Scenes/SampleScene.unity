@@ -296,7 +296,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   depth: 4
-  size: 100
+  size: 200
+  player: {fileID: 0}
 --- !u!114 &1715653978
 MonoBehaviour:
   m_ObjectHideFlags: 0

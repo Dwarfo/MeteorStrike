@@ -28,6 +28,8 @@ public class HashNode : INode
         }
     }
 
+    public List<AABB> Content { get { return objects; } }
+
     public void AddForm(AABB bound)
     {
         objects.Add(bound);

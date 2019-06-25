@@ -9,4 +9,5 @@ public interface INode {
     bool IsLeaf();
     void AddForm(AABB form);
     void RemoveForm(AABB form);
+    List<AABB> Content { get; }
 }

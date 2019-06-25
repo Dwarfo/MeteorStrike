@@ -199,12 +199,12 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
         return (new Framestats(GameManager.Instance.GetExecTime(), Time.deltaTime, collisionChecks, numOfObjects));
     }
 
-    public void Delete(INode node, AABB obj)
+    public void InsertToStatic(List<GameObject> staticGos)
     {
         throw new System.NotImplementedException();
     }
 
-    public void InsertToStatic(List<GameObject> staticGos)
+    public void Delete(GameObject obj)
     {
         throw new System.NotImplementedException();
     }

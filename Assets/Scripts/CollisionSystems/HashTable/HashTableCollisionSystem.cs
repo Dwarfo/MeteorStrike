@@ -37,7 +37,7 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
 	
 	void Update ()
     {
-        //UpdatePositionsAndHashes();
+        UpdatePositionsAndHashes();
 
         frameCounter++;
         if (frameCounter == 3)
@@ -49,7 +49,7 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
             UI.Instance.UpdateCollisionStatistics(collisionChecks);
         }
 
-        GetNearestNeighbour(player.GetComponent<AABB>());
+        //GetNearestNeighbour(player.GetComponent<AABB>());
 
 	}
 
@@ -183,9 +183,10 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
         return (new Framestats(GameManager.Instance.GetExecTime(), Time.deltaTime, collisionChecks, checkedBuckets));
     }
 
-    public void Delete(INode node, AABB obj)
+    public void Delete(GameObject obj)
     {
-        node.RemoveForm(obj);
+        HashNode node = buckets[HashIt(obj.transform.position)];
+        node.RemoveForm(obj.GetComponent<AABB>());
     }
 
     public KeyValuePair<AABB, float> GetNearestNeighbour(AABB obj)

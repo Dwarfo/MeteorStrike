@@ -6,7 +6,7 @@ public interface ICollisionSystem  {
 
     void Insert(GameObject node);
     INode GetRoot();
-    void Delete(INode node, AABB obj);
+    void Delete(GameObject obj);
     Framestats GetStats();
     void InsertToStatic(List<GameObject> staticGos);
 

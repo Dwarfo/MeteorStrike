@@ -9,14 +9,12 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
     public GameObject player;
 
     private List<AABB> objects = new List<AABB>();
-    private List<AABB> staticObjects = new List<AABB>();
+    //private List<AABB> staticObjects = new List<AABB>();
 
     public List<QuadTreeNode> leaves;
-    public List<QuadTreeNode> staticLeaves;
 
     private int count = 0;
     private QuadTree qtree;
-    private QuadTree staticTree;
     private int collisionChecks = 0;
     private int numOfObjects = 0;
 
@@ -27,25 +25,35 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
     }
     private void Start()
     {
-        staticLeaves = new List<QuadTreeNode>();
-        qtree = new QuadTree(transform.position, size, depth);
-
+        // Objects are inserted in static system before creation of a tree
+        if(!GameManager.Instance.StaticSystem)
+            qtree = new QuadTree(transform.position, size, depth);
     }
 
     private void Update()
     {
+        //staticPart
+        if (GameManager.Instance.StaticSystem)
+        {
+            QuadTreeNode nodeWithPlayer;
+            nodeWithPlayer = qtree.Insert(player.GetComponent<AABB>(), player.transform.position);
+            CheckCollisions();
+            GetNearestNeighbour(player);
+            Delete(player);
+            return;
+        }
+
         if (count == 3)
         {
             numOfObjects = 0;
             collisionChecks = 0;
             qtree = new QuadTree(this.transform.position, size, depth);
 
-
             leaves = new List<QuadTreeNode>();
             
-            foreach (var node in objects)
+            foreach (var obj in objects)
             {
-                leaves.Add(qtree.Insert(node, node.transform.position));
+                leaves.Add(qtree.Insert(obj, obj.transform.position));
             }
 
             CheckCollisions();
@@ -53,14 +61,15 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
         }
         else
             count++;
+        
     }
 
     private void CheckCollisions()
     {
         foreach (var node in leaves)
         {
-            if (node.values.Count > 1)
-                collisionChecks += BoundsInteraction.CheckN2(node.values);
+            if (node.Content.Count > 1)
+                collisionChecks += BoundsInteraction.CheckN2(node.Content);
         }
 
         if (GameManager.Instance.WriteStats)
@@ -74,17 +83,42 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
         objects.Add(obj.GetComponent<AABB>());
     }
 
-    public void Delete()
+    public void Delete(GameObject go)
     {
+        FindNode(go).RemoveForm(go.GetComponent<AABB>());
+        //currentNode.BackPropagate(); //Back propagate deletes only 1 layer, needs to count objects in child non leaves
+    }
+    //add this ti interface
+    public INode FindNode(GameObject go)
+    {
+        QuadTreeNode currentNode = qtree.GetRoot();
+        QuadTreeNode[] subNodes;
+        int index;
 
+        do
+        {
+            subNodes = (QuadTreeNode[])currentNode.Nodes;
+            index = GetIndexPosition(go.transform.position, currentNode.Position);
+            currentNode = subNodes[index];
+        } while (!currentNode.IsLeaf());
+
+        return currentNode;
+    }
+
+    private int GetIndexPosition(Vector2 lookupPosition, Vector2 nodePosition)
+    {
+        int index = 0;
+
+        index |= lookupPosition.y > nodePosition.y ? 2 : 0;
+        index |= lookupPosition.x > nodePosition.x ? 1 : 0;
+
+        return index;
     }
 
     private void OnDrawGizmos()
     {
         if (qtree != null)
             DrawNode(qtree.GetRoot());
-        if (staticTree != null)
-            DrawNode(staticTree.GetRoot());
     }
 
 
@@ -118,23 +152,16 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
         numOfObjects += num;
     }
 
-    public void Delete(INode node, AABB obj)
-    {
-        
-    }
-
     public void InsertToStatic(List<GameObject> staticGos)
     {
-        staticLeaves = new List<QuadTreeNode>();
+        leaves = new List<QuadTreeNode>();
+        qtree = new QuadTree(transform.position, size, depth);
 
         foreach (GameObject go in staticGos)
-            staticObjects.Add(go.GetComponent<AABB>());
-
-        staticTree = new QuadTree(this.transform.position, size, depth);
-
-        foreach (AABB aabb in staticObjects)
         {
-            staticLeaves.Add(staticTree.InsertStaticList(aabb));
+            QuadTreeNode newLeaf = qtree.Insert(go.GetComponent<AABB>());
+            if (!leaves.Contains(newLeaf))
+                leaves.Add(newLeaf);
         }
     }
 
@@ -142,5 +169,30 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
     {
         this.player = player;
         Insert(player);
+    }
+    // Make this method for interface with types like in quad tree
+    public KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj)
+    {
+        INode node = FindNode(obj);
+        AABB objectBound = obj.GetComponent<AABB>();
+        AABB nearestNeighbour = objectBound;
+        float distance = float.MaxValue;
+
+        foreach (AABB aabb in node.Content)
+        {
+            if (aabb.Equals(objectBound))
+                continue;
+
+            float newDist = BoundsInteraction.GetDistance(aabb, objectBound);
+            if (newDist < distance)
+            {
+                distance = newDist;
+                nearestNeighbour = aabb;
+            }
+        }
+
+        Debug.Log("Distance: " + distance + "| Object: " + nearestNeighbour.gameObject.name);
+
+        return new KeyValuePair<AABB, float>(nearestNeighbour, distance);
     }
 }

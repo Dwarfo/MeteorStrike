@@ -12,10 +12,11 @@ public class QuadTreeNode : INode {
         BottomRight = 3  //11
     }
 
+    public QuadTreeNode parent;
     Vector2 position;
     float size;
     QuadTreeNode[] subNodes;
-    public List<AABB> values;
+    List<AABB> values;
 
     public void AddForm(AABB form)
     {
@@ -24,10 +25,16 @@ public class QuadTreeNode : INode {
         values.Add(form);
     }
 
-    public QuadTreeNode(Vector2 position, float size)
+    public QuadTreeNode(QuadTreeNode parent, Vector2 position, float size)
     {
         this.position = position;
         this.size = size;
+        this.parent = parent;
+    }
+
+    public List<AABB> Content
+    {
+        get { return values; }
     }
 
     public IEnumerable<QuadTreeNode> Nodes
@@ -60,10 +67,10 @@ public class QuadTreeNode : INode {
 
     public QuadTreeNode SubdivideNode(Vector2 targetPosition, AABB aabb, int depth = 0)
     {
-        
         var subdivIndex = GetIndexPosition(targetPosition, position);
 
-        if (subNodes == null)
+
+        if (subNodes == null && depth > 0)
         {
             QuadTreeCollisionSystem.Instance.AddObjects(4);
             subNodes = new QuadTreeNode[4];
@@ -89,7 +96,7 @@ public class QuadTreeNode : INode {
                     newPos.x -= size * 0.25f;
                 }
 
-                subNodes[i] = new QuadTreeNode(newPos, size * 0.5f);
+                subNodes[i] = new QuadTreeNode(this, newPos, size * 0.5f);
             }
         }
 
@@ -102,7 +109,6 @@ public class QuadTreeNode : INode {
             AddForm(aabb);
             return this;
         }
-         
     }
 
     private int GetIndexPosition(Vector2 lookupPosition, Vector2 nodePosition)
@@ -117,6 +123,31 @@ public class QuadTreeNode : INode {
 
     public void RemoveForm(AABB form)
     {
-        throw new System.NotImplementedException();
+        values.Remove(form);
+    }
+
+    public bool GiveCap()
+    {
+        if (values == null)
+            return !IsLeaf();
+        else
+            return values.Count != 0;
+    }
+    public void BackPropagate()
+    {
+        if (this.IsLeaf() && parent != null)
+        {
+            parent.BackPropagate();
+            return;
+        }
+
+        foreach (var child in subNodes)
+        {
+            if (child.GiveCap())
+                return;
+        }
+        subNodes = null;
+        parent.BackPropagate();
     }
 }
+

@@ -18,6 +18,9 @@ public class Kd_TreeNode : INode  {
 
     public Vector2 Position => throw new System.NotImplementedException();
 
+    //TODO implement
+    public List<AABB> Content => throw new System.NotImplementedException();
+
     public Kd_TreeNode Divide(List<AABB> X, List<AABB> Y, int axis, Kd_TreeNode parent = null)
     {
         int middleIndex;

@@ -10,7 +10,7 @@ public class QuadTree  {
 
     public QuadTree(Vector2 position, float size, int depth)
     {
-        this.root = new QuadTreeNode(position, size);
+        this.root = new QuadTreeNode(null, position, size);
         this.depth = depth;
         //node.SubdivideNode(depth);
     }
@@ -26,7 +26,7 @@ public class QuadTree  {
         return root.SubdivideNode(position, aabb, depth);
     }
 
-    public QuadTreeNode InsertStaticList(AABB aabb)
+    public QuadTreeNode Insert(AABB aabb)
     {
         QuadTreeCollisionSystem.Instance.AddObjects(4);
         return root.SubdivideNode(aabb.transform.position, aabb, depth);
