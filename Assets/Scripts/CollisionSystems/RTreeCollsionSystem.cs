@@ -30,6 +30,41 @@ public class RTreeCollsionSystem : MonoBehaviour, ICollisionSystem
         throw new System.NotImplementedException();
     }
 
+    void ICollisionSystem.Delete(GameObject obj)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    INode ICollisionSystem.FindNode(GameObject go)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    KeyValuePair<AABB, float> ICollisionSystem.GetNearestNeighbour(GameObject obj)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    INode ICollisionSystem.GetRoot()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    Framestats ICollisionSystem.GetStats()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    void ICollisionSystem.Insert(GameObject node)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    void ICollisionSystem.InsertToStatic(List<GameObject> staticGos)
+    {
+        throw new System.NotImplementedException();
+    }
+
     void Start()
     {
         

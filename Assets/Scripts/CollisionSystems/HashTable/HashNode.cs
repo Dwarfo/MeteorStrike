@@ -5,9 +5,9 @@ using UnityEngine;
 public class HashNode : INode
 {
     private Vector2 position;
-    public AABB bound;
+    private AABB bound;
     public int hashNum;
-    public List<AABB> objects = new List<AABB>();
+    private List<AABB> content = new List<AABB>();
 
     public HashNode(Vector2 pos, int hashNum)
     {
@@ -28,16 +28,16 @@ public class HashNode : INode
         }
     }
 
-    public List<AABB> Content { get { return objects; } }
+    public List<AABB> Content { get { return content; } }
 
     public void AddForm(AABB bound)
     {
-        objects.Add(bound);
+        content.Add(bound);
     }
 
     public void RemoveForm(AABB bound)
     {
-        objects.Remove(bound);
+        content.Remove(bound);
     }
 
     public bool IsLeaf()

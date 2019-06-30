@@ -9,5 +9,7 @@ public interface ICollisionSystem  {
     void Delete(GameObject obj);
     Framestats GetStats();
     void InsertToStatic(List<GameObject> staticGos);
+    KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj);
+    INode FindNode(GameObject go);
 
 }

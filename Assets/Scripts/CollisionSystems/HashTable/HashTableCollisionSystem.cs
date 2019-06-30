@@ -106,9 +106,9 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
     {
         foreach (var node in buckets.Values)
         {
-            if (node.objects.Count > 1)
+            if (node.Content.Count > 1)
             {
-                collisionChecks += BoundsInteraction.CheckN2(node.objects);
+                collisionChecks += BoundsInteraction.CheckN2(node.Content);
                 checkedBuckets++;
             }
         }
@@ -164,7 +164,7 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
 
     private void DrawNode(HashNode node)
     {
-        if (node.objects.Count > 1)
+        if (node.Content.Count > 1)
             Gizmos.color = Color.green;
         else
             Gizmos.color = Color.red;
@@ -189,19 +189,19 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
         node.RemoveForm(obj.GetComponent<AABB>());
     }
 
-    public KeyValuePair<AABB, float> GetNearestNeighbour(AABB obj)
+    public KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj)
     {
         int hashOfAAbb = HashIt(obj.transform.position);
         HashNode node = buckets[hashOfAAbb];
-        AABB nearestNeighbour = obj;
+        AABB nearestNeighbour = obj.GetComponent<AABB>();
         float distance = float.MaxValue;
 
-        foreach (AABB aabb in node.objects)
+        foreach (AABB aabb in node.Content)
         {
             if (aabb.Equals(obj))
                 continue;
 
-            float newDist = BoundsInteraction.GetDistance(aabb, obj);
+            float newDist = BoundsInteraction.GetDistance(aabb, obj.GetComponent<AABB>());
             if (newDist < distance)
             {
                 distance = newDist;
@@ -217,5 +217,11 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
     private void HandlePlayerReady(GameObject player)
     {
         this.player = player;
+    }
+
+    public INode FindNode(GameObject go)
+    {
+        int hashOfAAbb = HashIt(go.transform.position);
+        return buckets[hashOfAAbb];
     }
 }

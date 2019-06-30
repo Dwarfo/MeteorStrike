@@ -14,15 +14,15 @@ public class QuadTreeNode : INode {
 
     public QuadTreeNode parent;
     Vector2 position;
-    float size;
-    QuadTreeNode[] subNodes;
-    List<AABB> values;
+    private float size;
+    private QuadTreeNode[] subNodes;
+    private List<AABB> content;
 
     public void AddForm(AABB form)
     {
-        if (values == null)
-            values = new List<AABB>();
-        values.Add(form);
+        if (content == null)
+            content = new List<AABB>();
+        content.Add(form);
     }
 
     public QuadTreeNode(QuadTreeNode parent, Vector2 position, float size)
@@ -34,7 +34,7 @@ public class QuadTreeNode : INode {
 
     public List<AABB> Content
     {
-        get { return values; }
+        get { return content; }
     }
 
     public IEnumerable<QuadTreeNode> Nodes
@@ -123,31 +123,38 @@ public class QuadTreeNode : INode {
 
     public void RemoveForm(AABB form)
     {
-        values.Remove(form);
+        content.Remove(form);
     }
 
-    public bool GiveCap()
+    public bool HasSomething()
     {
-        if (values == null)
-            return !IsLeaf();
+        if (IsLeaf())
+        {
+            if (content == null)
+                return false;
+            else
+                return content.Count != 0;
+        }
         else
-            return values.Count != 0;
+            return subNodes != null;
+        
     }
     public void BackPropagate()
     {
         if (this.IsLeaf() && parent != null)
         {
             parent.BackPropagate();
-            return;
         }
-
-        foreach (var child in subNodes)
+        else if(parent != null)
         {
-            if (child.GiveCap())
-                return;
+            foreach (var child in subNodes)
+            {
+                if (child.HasSomething())
+                    return;
+            }
+            subNodes = null;
+            parent.BackPropagate();
         }
-        subNodes = null;
-        parent.BackPropagate();
     }
 }
 

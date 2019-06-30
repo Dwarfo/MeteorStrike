@@ -5,21 +5,22 @@ using UnityEngine;
 
 public class Kd_TreeNode : INode  {
 
-    public Kd_TreeNode parent = null;
-    public bool isLeaf = false;
-    public List<AABB> children;
+    private Kd_TreeNode parent = null;
+    private bool isLeaf = false;
+    private Kd_TreeNode[] children;
+    private List<AABB> content;
 
     public float minX = 0;
     public float maxX = 0;
     public float minY = 0;
     public float maxY = 0;
 
-    public IEnumerable<INode> Children => throw new System.NotImplementedException();
+    public IEnumerable<INode> Children { get { return children; } }
 
     public Vector2 Position => throw new System.NotImplementedException();
 
     //TODO implement
-    public List<AABB> Content => throw new System.NotImplementedException();
+    public List<AABB> Content { get { return content; } }
 
     public Kd_TreeNode Divide(List<AABB> X, List<AABB> Y, int axis, Kd_TreeNode parent = null)
     {
@@ -28,7 +29,7 @@ public class Kd_TreeNode : INode  {
 
         if (axis == 0)
         {
-            if (X.Count < Kd_TreeCollisionSystem.Instance.maxObjNum)
+            if (X.Count <= Kd_TreeCollisionSystem.Instance.maxObjNum)
             {
                 makeLeaf(X);
                 MakeBounds(X, Y);
@@ -55,14 +56,17 @@ public class Kd_TreeNode : INode  {
 
             axis++;
 
+            children = new Kd_TreeNode[2];
             Kd_TreeNode leftNode = new Kd_TreeNode();
             Kd_TreeNode rightNode = new Kd_TreeNode();
+            children[0] = leftNode;
+            children[1] = rightNode;
             leftNode.Divide(leftX, leftY, axis, this);
             rightNode.Divide(rightX, rightY, axis, this);
         }
         else
         {
-            if (Y.Count < Kd_TreeCollisionSystem.Instance.maxObjNum)
+            if (Y.Count <= Kd_TreeCollisionSystem.Instance.maxObjNum)
             {
                 makeLeaf(Y);
                 MakeBounds(X, Y);
@@ -89,8 +93,11 @@ public class Kd_TreeNode : INode  {
             MakeBounds(X, Y);
 
 
+            children = new Kd_TreeNode[2];
             Kd_TreeNode leftNode = new Kd_TreeNode();
             Kd_TreeNode rightNode = new Kd_TreeNode();
+            children[0] = leftNode;
+            children[1] = rightNode;
             leftNode.Divide(leftX, leftY, axis, this);
             rightNode.Divide(rightX, rightY, axis, this);
         }
@@ -100,31 +107,31 @@ public class Kd_TreeNode : INode  {
 
     private void makeLeaf(List<AABB> newChildren)
     {
-        children = newChildren;
+        content = newChildren;
         isLeaf = true;
         Kd_TreeCollisionSystem.Instance.AddLeaf(this);
     }
 
     private void MakeBounds(List<AABB> X, List<AABB> Y)
     {
-        /*minX = X[0].transform.position.x;
+        minX = X[0].transform.position.x;
         maxX = X[X.Count - 1].transform.position.x;
         minY = Y[0].transform.position.y;
-        maxY = Y[Y.Count - 1].transform.position.y;*/
+        maxY = Y[Y.Count - 1].transform.position.y;
     }
 
     public bool IsLeaf()
     {
-        throw new System.NotImplementedException();
+        return isLeaf;
     }
 
     public void AddForm(AABB form)
     {
-        throw new System.NotImplementedException();
+        content.Add(form);
     }
 
     public void RemoveForm(AABB form)
     {
-        throw new System.NotImplementedException();
+        content.Remove(form);
     }
 }

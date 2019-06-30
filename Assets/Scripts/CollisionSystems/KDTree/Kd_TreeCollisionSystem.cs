@@ -6,6 +6,7 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
 
     public float size;
     public int maxObjNum = 4;
+    public GameObject player;
 
     //K - index of an axis, 1 is max
     private int count = 0;
@@ -20,6 +21,12 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
     private int numOfObjects = 0;
 
     // Use this for initialization
+    private void Awake()
+    {
+        base.Awake();
+        GameManager.Instance.OnPlayerReady.AddListener(HandlePlayerReady);
+    }
+
     void Start ()
     {
         
@@ -28,6 +35,19 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
 	// Update is called once per frame
 	void Update ()
     {
+        if (GameManager.Instance.StaticSystem)
+        {
+            collisionChecks = 0;
+            numOfObjects = 0;
+            count++;
+            SortOnAxis();
+            BuildTree();
+            //InsertInTree(player);
+            CheckCol();
+            GetNearestNeighbour(player);
+            //Delete(player);
+            return;
+        }
         //Debug.Log("Number of leaves: " + leaves.Count);
         collisionChecks = 0;
         count++;
@@ -39,13 +59,19 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
             SortOnAxis();
             BuildTree();
             CheckCol();
-            return;
+        GetNearestNeighbour(player);
+        return;
         //}
     }
 
     public void Insert(GameObject obj)
     {
         objects.Add(obj.GetComponent<AABB>());
+    }
+
+    public void InsertInTree(GameObject obj)
+    {
+        FindNode(obj).AddForm(obj.GetComponent<AABB>());
     }
 
     public void InsertBulk(List<GameObject> objects)
@@ -64,10 +90,10 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
     private void CheckCol()
     {
         foreach (Kd_TreeNode lst in leaves)
-            collisionChecks += BoundsInteraction.CheckN2(lst.children);
+            collisionChecks += BoundsInteraction.CheckN2(lst.Content);
 
         Framestats fst = GetStats();
-        Debug.Log("Deltatime: " + fst.deltaTime + " Framerate: " + fst.framerate);
+        //Debug.Log("Deltatime: " + fst.deltaTime + " Framerate: " + fst.framerate);
         if (GameManager.Instance.WriteStats)
         {
             StatsExcelSender.Instance.WriteStat(GetStats());
@@ -134,7 +160,7 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
             //Vector2[] ends = GetBoundsOfLeaves(node.children);
 
             string debugstr = "";
-            foreach (AABB aabb in node.children)
+            foreach (AABB aabb in node.Content)
             {
                 debugstr += aabb.gameObject.name + " ";
                 Debug.Log("Group " + debugstr);
@@ -156,7 +182,7 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
             foreach (Kd_TreeNode node in cachedLeaves)
             {
 
-                Vector2[] ends = GetBoundsOfLeaves(node.children);
+                Vector2[] ends = GetBoundsOfLeaves(node.Content);
 
                 Gizmos.color = Color.blue;
                 Gizmos.DrawWireCube(new Vector3((ends[1].x + ends[0].x) / 2, (ends[1].y + ends[0].y) / 2, 0.1f), new Vector3(ends[1].x - ends[0].x - 0.1f, ends[1].y - ends[0].y - 0.1f, 0.1f));
@@ -199,13 +225,71 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
         return (new Framestats(GameManager.Instance.GetExecTime(), Time.deltaTime, collisionChecks, numOfObjects));
     }
 
+    public INode FindNode(GameObject go)
+    {
+        Kd_TreeNode currentNode = (Kd_TreeNode)this.GetRoot();
+        int k = 0;
+        Kd_TreeNode[] children = (Kd_TreeNode[])currentNode.Children;
+
+        while (!currentNode.IsLeaf())
+        {
+            if (k == 0)
+            {
+                currentNode = go.transform.position.x < children[0].maxX ? children[0] : children[1];
+                children = (Kd_TreeNode[])currentNode.Children;
+                k++;
+            }
+            else
+            {
+                currentNode = go.transform.position.y < children[0].maxY ? children[0] : children[1];
+                children = (Kd_TreeNode[])currentNode.Children;
+                k = 0;
+            }
+        }
+
+        return currentNode;
+    }
+
+    public KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj)
+    {
+        INode node = FindNode(obj);
+        AABB objectBound = obj.GetComponent<AABB>();
+        AABB nearestNeighbour = objectBound;
+        float distance = float.MaxValue;
+
+        foreach (AABB aabb in node.Content)
+        {
+            if (aabb.Equals(objectBound))
+                continue;
+
+            float newDist = BoundsInteraction.GetDistance(aabb, objectBound);
+            if (newDist < distance)
+            {
+                distance = newDist;
+                nearestNeighbour = aabb;
+            }
+        }
+
+        Debug.Log("Distance: " + distance + "| Object: " + nearestNeighbour.gameObject.name);
+
+        return new KeyValuePair<AABB, float>(nearestNeighbour, distance);
+    }
     public void InsertToStatic(List<GameObject> staticGos)
     {
-        throw new System.NotImplementedException();
+        foreach (GameObject go in staticGos)
+            objects.Add(go.GetComponent<AABB>());
     }
 
     public void Delete(GameObject obj)
     {
-        throw new System.NotImplementedException();
+        FindNode(obj).RemoveForm(obj.GetComponent<AABB>());
+        objects.Remove(obj.GetComponent<AABB>());
     }
+    private void HandlePlayerReady(GameObject player)
+    {
+        this.player = player;
+        Insert(player);
+    }
+
+
 }

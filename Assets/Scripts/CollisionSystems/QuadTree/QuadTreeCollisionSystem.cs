@@ -85,8 +85,9 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
 
     public void Delete(GameObject go)
     {
-        FindNode(go).RemoveForm(go.GetComponent<AABB>());
-        //currentNode.BackPropagate(); //Back propagate deletes only 1 layer, needs to count objects in child non leaves
+        QuadTreeNode currentNode = (QuadTreeNode)FindNode(go);
+        currentNode.RemoveForm(go.GetComponent<AABB>());
+        currentNode.BackPropagate(); //Back propagate deletes only 1 layer, needs to count objects in child non leaves
     }
     //add this ti interface
     public INode FindNode(GameObject go)
