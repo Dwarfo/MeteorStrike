@@ -37,11 +37,6 @@ public class QuadTreeNode : INode {
         get { return content; }
     }
 
-    public IEnumerable<QuadTreeNode> Nodes
-    {
-        get { return subNodes; }
-    }
-
     public Vector2 Position
     {
         get { return position; }
@@ -52,12 +47,7 @@ public class QuadTreeNode : INode {
         get { return size; }
     }
 
-    public IEnumerable<INode> Children
-    {
-        get
-        {
-            return subNodes;
-        }
+    public IEnumerable<INode> Children { get{return subNodes;}
     }
 
     public bool IsLeaf()
@@ -111,7 +101,7 @@ public class QuadTreeNode : INode {
         }
     }
 
-    private int GetIndexPosition(Vector2 lookupPosition, Vector2 nodePosition)
+    public static int GetIndexPosition(Vector2 lookupPosition, Vector2 nodePosition)
     {
         int index = 0;
 

@@ -11,7 +11,7 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
     private List<AABB> objects = new List<AABB>();
     //private List<AABB> staticObjects = new List<AABB>();
 
-    public List<QuadTreeNode> leaves;
+    public HashSet<QuadTreeNode> leaves;
 
     private int count = 0;
     private QuadTree qtree;
@@ -32,7 +32,6 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
 
     private void Update()
     {
-        //staticPart
         if (GameManager.Instance.StaticSystem)
         {
             QuadTreeNode nodeWithPlayer;
@@ -47,21 +46,12 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
         {
             numOfObjects = 0;
             collisionChecks = 0;
-            qtree = new QuadTree(this.transform.position, size, depth);
-
-            leaves = new List<QuadTreeNode>();
-            
-            foreach (var obj in objects)
-            {
-                leaves.Add(qtree.Insert(obj, obj.transform.position));
-            }
-
+            Build();
             CheckCollisions();
             count = 0;
         }
         else
             count++;
-        
     }
 
     private void CheckCollisions()
@@ -87,9 +77,9 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
     {
         QuadTreeNode currentNode = (QuadTreeNode)FindNode(go);
         currentNode.RemoveForm(go.GetComponent<AABB>());
-        currentNode.BackPropagate(); //Back propagate deletes only 1 layer, needs to count objects in child non leaves
+        currentNode.BackPropagate();
     }
-    //add this ti interface
+
     public INode FindNode(GameObject go)
     {
         QuadTreeNode currentNode = qtree.GetRoot();
@@ -99,21 +89,11 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
         do
         {
             subNodes = (QuadTreeNode[])currentNode.Nodes;
-            index = GetIndexPosition(go.transform.position, currentNode.Position);
+            index = QuadTreeNode.GetIndexPosition(go.transform.position, currentNode.Position);
             currentNode = subNodes[index];
         } while (!currentNode.IsLeaf());
 
         return currentNode;
-    }
-
-    private int GetIndexPosition(Vector2 lookupPosition, Vector2 nodePosition)
-    {
-        int index = 0;
-
-        index |= lookupPosition.y > nodePosition.y ? 2 : 0;
-        index |= lookupPosition.x > nodePosition.x ? 1 : 0;
-
-        return index;
     }
 
     private void OnDrawGizmos()
@@ -195,5 +175,16 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
         Debug.Log("Distance: " + distance + "| Object: " + nearestNeighbour.gameObject.name);
 
         return new KeyValuePair<AABB, float>(nearestNeighbour, distance);
+    }
+
+    public void Build()
+    {
+        qtree = new QuadTree(this.transform.position, size, depth);
+        leaves = new List<QuadTreeNode>();
+        
+        foreach (var obj in objects)
+        {
+            leaves.Add(qtree.Insert(obj, obj.transform.position));
+        }
     }
 }
