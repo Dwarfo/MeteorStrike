@@ -18,13 +18,6 @@ public class QuadTreeNode : INode {
     private QuadTreeNode[] subNodes;
     private List<AABB> content;
 
-    public void AddForm(AABB form)
-    {
-        if (content == null)
-            content = new List<AABB>();
-        content.Add(form);
-    }
-
     public QuadTreeNode(QuadTreeNode parent, Vector2 position, float size)
     {
         this.position = position;
@@ -32,33 +25,31 @@ public class QuadTreeNode : INode {
         this.parent = parent;
     }
 
-    public List<AABB> Content
-    {
-        get { return content; }
-    }
-
-    public Vector2 Position
-    {
-        get { return position; }
-    }
-
-    public float Size
-    {
-        get { return size; }
-    }
-
-    public IEnumerable<INode> Children { get{return subNodes;}
-    }
+    public IEnumerable<INode> Children { get{return subNodes;} }
+    public List<AABB> Content { get { return content; } }
+    public Vector2 Position { get { return position; } }
+    public float Size { get { return size; } }
 
     public bool IsLeaf()
     {
         return subNodes == null;
     }
 
+    public void AddForm(AABB form)
+    {
+        if (content == null)
+            content = new List<AABB>();
+        content.Add(form);
+    }
+
+    public void RemoveForm(AABB form)
+    {
+        content.Remove(form);
+    }
+    
     public QuadTreeNode SubdivideNode(Vector2 targetPosition, AABB aabb, int depth = 0)
     {
         var subdivIndex = GetIndexPosition(targetPosition, position);
-
 
         if (subNodes == null && depth > 0)
         {
@@ -111,11 +102,6 @@ public class QuadTreeNode : INode {
         return index;
     }
 
-    public void RemoveForm(AABB form)
-    {
-        content.Remove(form);
-    }
-
     public bool HasSomething()
     {
         if (IsLeaf())
@@ -147,4 +133,3 @@ public class QuadTreeNode : INode {
         }
     }
 }
-

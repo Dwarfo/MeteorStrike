@@ -10,18 +10,30 @@ public class Kd_TreeNode : INode  {
     private Kd_TreeNode[] children;
     private List<AABB> content;
 
-    public float minX = 0;
-    public float maxX = 0;
-    public float minY = 0;
-    public float maxY = 0;
+    private float minX = 0;
+    private float maxX = 0;
+    private float minY = 0;
+    private float maxY = 0;
 
     public IEnumerable<INode> Children { get { return children; } }
-
-    public Vector2 Position => throw new System.NotImplementedException();
-
-    //TODO implement
     public List<AABB> Content { get { return content; } }
+    public Vector2 Position { get { return new Vector2((minX + maxX)/2, (minY + maxY)/2);} }
 
+    public bool IsLeaf()
+    {
+        return isLeaf;
+    }
+
+    public void AddForm(AABB form)
+    {
+        content.Add(form);
+    }
+
+    public void RemoveForm(AABB form)
+    {
+        content.Remove(form);
+    }
+    
     public Kd_TreeNode Divide(List<AABB> X, List<AABB> Y, int axis, Kd_TreeNode parent = null)
     {
         int middleIndex;
@@ -118,20 +130,5 @@ public class Kd_TreeNode : INode  {
         maxX = X[X.Count - 1].transform.position.x;
         minY = Y[0].transform.position.y;
         maxY = Y[Y.Count - 1].transform.position.y;
-    }
-
-    public bool IsLeaf()
-    {
-        return isLeaf;
-    }
-
-    public void AddForm(AABB form)
-    {
-        content.Add(form);
-    }
-
-    public void RemoveForm(AABB form)
-    {
-        content.Remove(form);
     }
 }

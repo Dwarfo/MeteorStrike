@@ -14,16 +14,15 @@ public class HashNode : INode
         this.position = pos;
         this.hashNum = hashNum;
     }
-
-    public Vector2 Position
-    {
-        get { return position; }
-    }
-
     public IEnumerable<INode> Children { get { return null; } }
-
     public List<AABB> Content { get { return content; } }
+    public Vector2 Position { get { return position; } }
 
+    public bool IsLeaf()
+    {
+        return false;
+    }
+    
     public void AddForm(AABB bound)
     {
         content.Add(bound);
@@ -32,10 +31,5 @@ public class HashNode : INode
     public void RemoveForm(AABB bound)
     {
         content.Remove(bound);
-    }
-
-    public bool IsLeaf()
-    {
-        return false;
     }
 }
