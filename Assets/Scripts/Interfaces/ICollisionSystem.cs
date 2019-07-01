@@ -4,12 +4,13 @@ using UnityEngine;
 
 public interface ICollisionSystem  {
 
-    void Insert(GameObject node);
     INode GetRoot();
+    void Build();
+    void Insert(GameObject node);
     void Delete(GameObject obj);
-    Framestats GetStats();
-    void InsertToStatic(List<GameObject> staticGos);
-    KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj);
     INode FindNode(GameObject go);
+    void InsertToStatic(List<GameObject> staticGos);
     void CheckCollisions();
+    KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj);
+    Framestats GetStats();
 }

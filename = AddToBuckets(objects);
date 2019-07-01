@@ -1,0 +1,300 @@
+[1mdiff --git a/Assets/Scripts/CollisionSystems/HashTable/HashNode.cs b/Assets/Scripts/CollisionSystems/HashTable/HashNode.cs[m
+[1mindex ef68932..19001b3 100644[m
+[1m--- a/Assets/Scripts/CollisionSystems/HashTable/HashNode.cs[m
+[1m+++ b/Assets/Scripts/CollisionSystems/HashTable/HashNode.cs[m
+[36m@@ -20,13 +20,7 @@[m [mpublic class HashNode : INode[m
+         get { return position; }[m
+     }[m
+ [m
+[31m-    public IEnumerable<INode> Children[m
+[31m-    {[m
+[31m-        get[m
+[31m-        {[m
+[31m-            return null;[m
+[31m-        }[m
+[31m-    }[m
+[32m+[m[32m    public IEnumerable<INode> Children { get { return null; } }[m
+ [m
+     public List<AABB> Content { get { return content; } }[m
+ [m
+[1mdiff --git a/Assets/Scripts/CollisionSystems/HashTable/HashTableCollisionSystem.cs b/Assets/Scripts/CollisionSystems/HashTable/HashTableCollisionSystem.cs[m
+[1mindex 4895ca2..5d39c7e 100644[m
+[1m--- a/Assets/Scripts/CollisionSystems/HashTable/HashTableCollisionSystem.cs[m
+[1m+++ b/Assets/Scripts/CollisionSystems/HashTable/HashTableCollisionSystem.cs[m
+[36m@@ -3,8 +3,6 @@[m [musing System.Collections.Generic;[m
+ using UnityEngine;[m
+ using UnityEngine.Events;[m
+ [m
+[31m-[m
+[31m-//Check inside of a bucket via BVH algorithm[m
+ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, ICollisionSystem {[m
+ [m
+     public float bucketSize;[m
+[36m@@ -31,13 +29,11 @@[m [mpublic class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>,[m
+         if (fieldSize % 2 != 0)[m
+             fieldSize++;[m
+         BuildBuckets();[m
+[31m-        if(GameManager.Instance.StaticSystem)[m
+[31m-            AddToBuckets(staticObjects);[m
+     }[m
+ 	[m
+ 	void Update ()[m
+     {[m
+[31m-        UpdatePositionsAndHashes();[m
+[32m+[m[32m        Build();[m
+ [m
+         frameCounter++;[m
+         if (frameCounter == 3)[m
+[36m@@ -48,9 +44,6 @@[m [mpublic class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>,[m
+             frameCounter = 0;[m
+             UI.Instance.UpdateCollisionStatistics(collisionChecks);[m
+         }[m
+[31m-[m
+[31m-        //GetNearestNeighbour(player.GetComponent<AABB>());[m
+[31m-[m
+ 	}[m
+ [m
+     //GameObject is added to dict of all objects with a hash representing it's position[m
+[36m@@ -91,8 +84,6 @@[m [mpublic class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>,[m
+             if (bound.Value != newHash)[m
+             {[m
+                 buckets[bound.Value].RemoveForm(bound.Key);[m
+[31m-[m
+[31m-                //Delete(buckets[bound.Value], bound.Key);[m
+                 buckets[newHash].AddForm(bound.Key);[m
+             }[m
+ [m
+[36m@@ -102,7 +93,7 @@[m [mpublic class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>,[m
+     }[m
+ [m
+     //if bucket contains more than 1 object forcecheck collision between them[m
+[31m-    private void CheckCollisions()[m
+[32m+[m[32m    public void CheckCollisions()[m
+     {[m
+         foreach (var node in buckets.Values)[m
+         {[m
+[36m@@ -135,10 +126,16 @@[m [mpublic class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>,[m
+                 buckets.Add(node.hashNum, node);[m
+             }[m
+         }[m
+[31m-        [m
+[31m-        //buckets.Add(-1, new HashNode(new Vector2(float.MaxValue, float.MaxValue), -1));[m
+     }[m
+ [m
+[32m+[m[32m    //In hashTable there is no need to rebuild buckets, but rather to only recalculate hashes of objects[m
+[32m+[m[32m    public void Build()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        if(GameManager.Instance.StaticSystem)[m
+[32m+[m[32m            staticObjects = AddToBuckets(staticObjects);[m
+[32m+[m[32m        objects = AddToBuckets(objects);[m
+[32m+[m
+[32m+[m[32m    }[m
+     //Simple 2D hash[m
+     private int HashIt(Vector2 position)[m
+     {[m
+[36m@@ -172,7 +169,7 @@[m [mpublic class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>,[m
+         Gizmos.DrawWireCube(node.Position, new Vector3(0.95f, 0.95f, 0.1f) * bucketSize);[m
+     }[m
+ [m
+[31m-    //Root is irrelevant in hash table[m
+[32m+[m[32m    //Root is irrelevant and nonexistant in hash table[m
+     public INode GetRoot()[m
+     {[m
+         return null;[m
+[36m@@ -221,7 +218,6 @@[m [mpublic class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>,[m
+ [m
+     public INode FindNode(GameObject go)[m
+     {[m
+[31m-        int hashOfAAbb = HashIt(go.transform.position);[m
+[31m-        return buckets[hashOfAAbb];[m
+[32m+[m[32m        return buckets[HashIt(go.transform.position)];[m
+     }[m
+ }[m
+\ No newline at end of file[m
+[1mdiff --git a/Assets/Scripts/CollisionSystems/KDTree/Kd_TreeCollisionSystem.cs b/Assets/Scripts/CollisionSystems/KDTree/Kd_TreeCollisionSystem.cs[m
+[1mindex e9e409c..f5b9c6a 100644[m
+[1m--- a/Assets/Scripts/CollisionSystems/KDTree/Kd_TreeCollisionSystem.cs[m
+[1m+++ b/Assets/Scripts/CollisionSystems/KDTree/Kd_TreeCollisionSystem.cs[m
+[36m@@ -35,33 +35,15 @@[m [mpublic class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol[m
+ 	// Update is called once per frame[m
+ 	void Update ()[m
+     {[m
+[31m-        if (GameManager.Instance.StaticSystem)[m
+[31m-        {[m
+[31m-            collisionChecks = 0;[m
+[31m-            numOfObjects = 0;[m
+[31m-            count++;[m
+[31m-            SortOnAxis();[m
+[31m-            BuildTree();[m
+[31m-            //InsertInTree(player);[m
+[31m-            CheckCol();[m
+[31m-            GetNearestNeighbour(player);[m
+[31m-            //Delete(player);[m
+[31m-            return;[m
+[31m-        }[m
+[31m-        //Debug.Log("Number of leaves: " + leaves.Count);[m
+         collisionChecks = 0;[m
+[32m+[m[32m        numOfObjects = 0;[m
+         count++;[m
+[31m-        //CheckCol();[m
+[31m-        //DrawDebugz();[m
+[31m-        //if (count % 3 == 0 && objects.Count != 0)[m
+[31m-        //{[m
+[31m-            numOfObjects = 0;[m
+[31m-            SortOnAxis();[m
+[31m-            BuildTree();[m
+[31m-            CheckCol();[m
+[32m+[m[32m        Build();[m
+[32m+[m[32m        //InsertInTree(player);[m
+[32m+[m[32m        CheckCol();[m
+         GetNearestNeighbour(player);[m
+[32m+[m[32m        //Delete(player);[m
+         return;[m
+[31m-        //}[m
+     }[m
+ [m
+     public void Insert(GameObject obj)[m
+[36m@@ -80,14 +62,15 @@[m [mpublic class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol[m
+             this.objects.Add(go.GetComponent<AABB>());[m
+     }[m
+ [m
+[31m-    private void BuildTree()[m
+[32m+[m[32m    public void Build()[m
+     {[m
+[32m+[m[32m        SortOnAxis();[m
+         leaves.Clear();[m
+         root = new Kd_TreeNode();[m
+         root.Divide(sortedX, sortedY, 0);[m
+     }[m
+ [m
+[31m-    private void CheckCol()[m
+[32m+[m[32m    public void CheckCollisions()[m
+     {[m
+         foreach (Kd_TreeNode lst in leaves)[m
+             collisionChecks += BoundsInteraction.CheckN2(lst.Content);[m
+[36m@@ -100,7 +83,7 @@[m [mpublic class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol[m
+         }[m
+     }[m
+ [m
+[31m-    public void AddLeaf(Kd_TreeNode leaf)[m
+[32m+[m[32m    private void AddLeaf(Kd_TreeNode leaf)[m
+     {[m
+         leaves.Add(leaf);[m
+     }[m
+[36m@@ -114,9 +97,6 @@[m [mpublic class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol[m
+     {[m
+         sortedX = new List<AABB>(objects);[m
+         sortedY = new List<AABB>(objects);[m
+[31m-        //sortedX.Sort((p1, p2) => (p1.transform.position.x).CompareTo(p2.transform.position.x));[m
+[31m-        //sortedY.Sort((p1, p2) => (p1.transform.position.y).CompareTo(p2.transform.position.y));[m
+[31m-        [m
+ [m
+         sortedX.Sort(delegate (AABB p1, AABB p2)[m
+         {[m
+[36m@@ -135,21 +115,6 @@[m [mpublic class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol[m
+             else[m
+                 return 0;[m
+         });[m
+[31m-[m
+[31m-        /*string debugstr = "";[m
+[31m-[m
+[31m-        for (int i = 0; i < sortedX.Count; i++)[m
+[31m-        {[m
+[31m-            debugstr += sortedX[i].gameObject.transform.position.x + " ";[m
+[31m-        }[m
+[31m-        Debug.Log("SortedX " + debugstr);[m
+[31m-        debugstr = "";[m
+[31m-        for (int i = 0; i < sortedY.Count; i++)[m
+[31m-        {[m
+[31m-            debugstr += sortedY[i].gameObject.transform.position.y + " ";[m
+[31m-        }[m
+[31m-        Debug.Log("SortedY " + debugstr);[m
+[31m-        */[m
+     }[m
+ [m
+     private void DrawDebugz() {[m
+[36m@@ -157,21 +122,15 @@[m [mpublic class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol[m
+         Debug.Log("Leaves " + leaves.Count);[m
+         foreach (Kd_TreeNode node in leaves)[m
+         {  [m
+[31m-            //Vector2[] ends = GetBoundsOfLeaves(node.children);[m
+[31m-[m
+             string debugstr = "";[m
+             foreach (AABB aabb in node.Content)[m
+             {[m
+                 debugstr += aabb.gameObject.name + " ";[m
+                 Debug.Log("Group " + debugstr);[m
+[31m-[m
+[31m-            }[m
+[31m-            [m
+[31m-        }[m
+[31m-      [m
+[32m+[m[32m            }[m[41m [m
+[32m+[m[32m        }[m[41m      [m
+     }[m
+ [m
+[31m-    //Prettty much working[m
+     private void OnDrawGizmos()[m
+     {[m
+         var cachedLeaves = leaves;[m
+[36m@@ -181,7 +140,6 @@[m [mpublic class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol[m
+         {[m
+             foreach (Kd_TreeNode node in cachedLeaves)[m
+             {[m
+[31m-[m
+                 Vector2[] ends = GetBoundsOfLeaves(node.Content);[m
+ [m
+                 Gizmos.color = Color.blue;[m
+[36m@@ -213,12 +171,7 @@[m [mpublic class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol[m
+         Vector2 min = new Vector2(minx, miny);[m
+         Vector2 max = new Vector2(maxx, maxy);[m
+ [m
+[31m-        return new Vector2[2] { min,max};[m
+[31m-    }[m
+[31m-[m
+[31m-    public void AddObjects(int obj)[m
+[31m-    {[m
+[31m-        numOfObjects += obj;[m
+[32m+[m[32m        return new Vector2[2] {min,max};[m
+     }[m
+     public Framestats GetStats()[m
+     {[m
+[1mdiff --git a/Assets/Scripts/CollisionSystems/QuadTree/QuadTreeCollisionSystem.cs b/Assets/Scripts/CollisionSystems/QuadTree/QuadTreeCollisionSystem.cs[m
+[1mindex 267b1cd..3818a05 100644[m
+[1m--- a/Assets/Scripts/CollisionSystems/QuadTree/QuadTreeCollisionSystem.cs[m
+[1m+++ b/Assets/Scripts/CollisionSystems/QuadTree/QuadTreeCollisionSystem.cs[m
+[36m@@ -54,7 +54,7 @@[m [mpublic class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC[m
+             count++;[m
+     }[m
+ [m
+[31m-    private void CheckCollisions()[m
+[32m+[m[32m    public void CheckCollisions()[m
+     {[m
+         foreach (var node in leaves)[m
+         {[m
+[36m@@ -151,12 +151,12 @@[m [mpublic class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC[m
+         this.player = player;[m
+         Insert(player);[m
+     }[m
+[31m-    // Make this method for interface with types like in quad tree[m
+[32m+[m
+     public KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj)[m
+     {[m
+         INode node = FindNode(obj);[m
+         AABB objectBound = obj.GetComponent<AABB>();[m
+[31m-        AABB nearestNeighbour = objectBound;[m
+[32m+[m[32m        AABB nearestNeighbour;[m
+         float distance = float.MaxValue;[m
+ [m
+         foreach (AABB aabb in node.Content)[m
+[1mdiff --git a/Assets/Scripts/Interfaces/ICollisionSystem.cs b/Assets/Scripts/Interfaces/ICollisionSystem.cs[m
+[1mindex 9f08ec4..d5b2299 100644[m
+[1m--- a/Assets/Scripts/Interfaces/ICollisionSystem.cs[m
+[1m+++ b/Assets/Scripts/Interfaces/ICollisionSystem.cs[m
+[36m@@ -11,5 +11,5 @@[m [mpublic interface ICollisionSystem  {[m
+     void InsertToStatic(List<GameObject> staticGos);[m
+     KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj);[m
+     INode FindNode(GameObject go);[m
+[31m-[m
+[32m+[m[32m    void CheckCollisions();[m
+ }[m

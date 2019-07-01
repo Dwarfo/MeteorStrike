@@ -9,8 +9,6 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
     public GameObject player;
 
     private List<AABB> objects = new List<AABB>();
-    //private List<AABB> staticObjects = new List<AABB>();
-
     public HashSet<QuadTreeNode> leaves;
 
     private int count = 0;
@@ -54,17 +52,19 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
             count++;
     }
 
-    public void CheckCollisions()
+    public INode GetRoot()
     {
-        foreach (var node in leaves)
-        {
-            if (node.Content.Count > 1)
-                collisionChecks += BoundsInteraction.CheckN2(node.Content);
-        }
+        return qtree.GetRoot();
+    }
 
-        if (GameManager.Instance.WriteStats)
+    public void Build()
+    {
+        qtree = new QuadTree(this.transform.position, size, depth);
+        leaves = new List<QuadTreeNode>();
+        
+        foreach (var obj in objects)
         {
-            StatsExcelSender.Instance.WriteStat(GetStats());
+            leaves.Add(qtree.Insert(obj, obj.transform.position));
         }
     }
 
@@ -96,43 +96,6 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
         return currentNode;
     }
 
-    private void OnDrawGizmos()
-    {
-        if (qtree != null)
-            DrawNode(qtree.GetRoot());
-    }
-
-
-    private void DrawNode(QuadTreeNode node, int nodeDepth = 0)
-    {
-        if (!node.IsLeaf())
-        {
-            foreach (var subnode in node.Nodes)
-            {
-                if(subnode != null)
-                    DrawNode(subnode, nodeDepth + 1);
-            }
-        }
-
-        Gizmos.color = Color.Lerp(Color.magenta, Color.white, nodeDepth / (float)depth);
-        Gizmos.DrawWireCube(node.Position, new Vector3(1, 1, 0.1f) * node.Size);
-    }
-
-    public INode GetRoot()
-    {
-        return qtree.GetRoot();
-    }
-
-    public Framestats GetStats()
-    {
-        return (new Framestats(GameManager.Instance.GetExecTime(), Time.deltaTime, collisionChecks, numOfObjects));
-    }
-
-    public void AddObjects(int num)
-    {
-        numOfObjects += num;
-    }
-
     public void InsertToStatic(List<GameObject> staticGos)
     {
         leaves = new List<QuadTreeNode>();
@@ -145,11 +108,18 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
                 leaves.Add(newLeaf);
         }
     }
-
-    private void HandlePlayerReady(GameObject player)
+    public void CheckCollisions()
     {
-        this.player = player;
-        Insert(player);
+        foreach (var node in leaves)
+        {
+            if (node.Content.Count > 1)
+                collisionChecks += BoundsInteraction.CheckN2(node.Content);
+        }
+
+        if (GameManager.Instance.WriteStats)
+        {
+            StatsExcelSender.Instance.WriteStat(GetStats());
+        }
     }
 
     public KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj)
@@ -177,14 +147,41 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
         return new KeyValuePair<AABB, float>(nearestNeighbour, distance);
     }
 
-    public void Build()
+    public Framestats GetStats()
     {
-        qtree = new QuadTree(this.transform.position, size, depth);
-        leaves = new List<QuadTreeNode>();
-        
-        foreach (var obj in objects)
-        {
-            leaves.Add(qtree.Insert(obj, obj.transform.position));
-        }
+        return (new Framestats(GameManager.Instance.GetExecTime(), Time.deltaTime, collisionChecks, numOfObjects));
     }
+
+    private void OnDrawGizmos()
+    {
+        if (qtree != null)
+            DrawNode(qtree.GetRoot());
+    }
+
+    private void DrawNode(QuadTreeNode node, int nodeDepth = 0)
+    {
+        if (!node.IsLeaf())
+        {
+            foreach (var subnode in node.Nodes)
+            {
+                if(subnode != null)
+                    DrawNode(subnode, nodeDepth + 1);
+            }
+        }
+
+        Gizmos.color = Color.Lerp(Color.magenta, Color.white, nodeDepth / (float)depth);
+        Gizmos.DrawWireCube(node.Position, new Vector3(1, 1, 0.1f) * node.Size);
+    }
+
+    public void AddObjects(int num)
+    {
+        numOfObjects += num;
+    }
+
+    private void HandlePlayerReady(GameObject player)
+    {
+        this.player = player;
+        Insert(player);
+    }
+
 }

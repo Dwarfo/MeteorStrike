@@ -46,13 +46,37 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
         }
 	}
 
-    //GameObject is added to dict of all objects with a hash representing it's position
+    //Root is irrelevant and nonexistant in hash table
+    public INode GetRoot()
+    {
+        return null;
+    }
+    //In hashTable there is no need to rebuild buckets, but rather to only recalculate hashes of objects
+    public void Build()
+    {
+        if(GameManager.Instance.StaticSystem)
+            staticObjects = AddToBuckets(staticObjects);
+        objects = AddToBuckets(objects);
+
+    }
+
     public void Insert(GameObject go)
     {
         //Initial hash is -1, because newly added elements do not get builded if they have the same hash
         //after initial insert, rendering static system and first few frames unusable
         objects.Add(go.GetComponent<AABB>(), -1);
     }
+
+    public void Delete(GameObject obj)
+    {
+        HashNode node = buckets[HashIt(obj.transform.position)];
+        node.RemoveForm(obj.GetComponent<AABB>());
+    }
+    public INode FindNode(GameObject go)
+    {
+        return buckets[HashIt(go.transform.position)];
+    }
+
     public void InsertToStatic(List<GameObject> staticGos)
     {
         foreach(GameObject go in staticGos)
@@ -60,38 +84,6 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
 
         Debug.Log("Size again: " + staticObjects.Count);
     }
-
-    //In classic way one clears lists every frame, but in our case we check if hash was changed and create a new list only if needed
-    private void UpdatePositionsAndHashes()
-    {
-        objects = AddToBuckets(objects);
-    }
-
-    private Dictionary<AABB, int> AddToBuckets(Dictionary<AABB, int> objects)
-    {
-        Dictionary<AABB, int> newObjects = new Dictionary<AABB, int>();
-        bool outOfBounds = false;
-        foreach (KeyValuePair<AABB, int> bound in objects)
-        {
-            //If object goes out of scene bounds it gets deleted and is not calculated anymore
-            int newHash = HashIt(bound.Key.transform.position, out outOfBounds);
-            if (/*!buckets.ContainsKey(newHash) ||*/ outOfBounds)
-            {
-                GameManager.Instance.FormOutOfBounds(bound.Key);
-                buckets[bound.Value].RemoveForm(bound.Key);
-                continue;
-            }
-            if (bound.Value != newHash)
-            {
-                buckets[bound.Value].RemoveForm(bound.Key);
-                buckets[newHash].AddForm(bound.Key);
-            }
-
-            newObjects.Add(bound.Key, newHash);
-        }
-        return newObjects;
-    }
-
     //if bucket contains more than 1 object forcecheck collision between them
     public void CheckCollisions()
     {
@@ -110,6 +102,34 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
         }
     }
 
+    public KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj)
+    {
+        int hashOfAAbb = HashIt(obj.transform.position);
+        HashNode node = buckets[hashOfAAbb];
+        AABB nearestNeighbour = obj.GetComponent<AABB>();
+        float distance = float.MaxValue;
+
+        foreach (AABB aabb in node.Content)
+        {
+            if (aabb.Equals(obj))
+                continue;
+
+            float newDist = BoundsInteraction.GetDistance(aabb, obj.GetComponent<AABB>());
+            if (newDist < distance)
+            {
+                distance = newDist;
+                nearestNeighbour = aabb;
+            }
+        }
+        
+        Debug.Log("Distance: " + distance + "| Object: " + nearestNeighbour.gameObject.name);
+
+        return new KeyValuePair<AABB, float>(nearestNeighbour, distance);
+    }
+    public Framestats GetStats()
+    {
+        return (new Framestats(GameManager.Instance.GetExecTime(), Time.deltaTime, collisionChecks, checkedBuckets));
+    }
     //Initially create buckets according to the size of field defined by fieldSize
     private void BuildBuckets()
     {
@@ -128,15 +148,6 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
         }
     }
 
-    //In hashTable there is no need to rebuild buckets, but rather to only recalculate hashes of objects
-    public void Build()
-    {
-        if(GameManager.Instance.StaticSystem)
-            staticObjects = AddToBuckets(staticObjects);
-        objects = AddToBuckets(objects);
-
-    }
-    //Simple 2D hash
     private int HashIt(Vector2 position)
     {
         return Mathf.FloorToInt(position.x / bucketSize) + Mathf.FloorToInt(position.y / bucketSize) * fieldSize;
@@ -169,46 +180,29 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
         Gizmos.DrawWireCube(node.Position, new Vector3(0.95f, 0.95f, 0.1f) * bucketSize);
     }
 
-    //Root is irrelevant and nonexistant in hash table
-    public INode GetRoot()
+    private Dictionary<AABB, int> AddToBuckets(Dictionary<AABB, int> objects)
     {
-        return null;
-    }
-
-    public Framestats GetStats()
-    {
-        return (new Framestats(GameManager.Instance.GetExecTime(), Time.deltaTime, collisionChecks, checkedBuckets));
-    }
-
-    public void Delete(GameObject obj)
-    {
-        HashNode node = buckets[HashIt(obj.transform.position)];
-        node.RemoveForm(obj.GetComponent<AABB>());
-    }
-
-    public KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj)
-    {
-        int hashOfAAbb = HashIt(obj.transform.position);
-        HashNode node = buckets[hashOfAAbb];
-        AABB nearestNeighbour = obj.GetComponent<AABB>();
-        float distance = float.MaxValue;
-
-        foreach (AABB aabb in node.Content)
+        Dictionary<AABB, int> newObjects = new Dictionary<AABB, int>();
+        bool outOfBounds = false;
+        foreach (KeyValuePair<AABB, int> bound in objects)
         {
-            if (aabb.Equals(obj))
-                continue;
-
-            float newDist = BoundsInteraction.GetDistance(aabb, obj.GetComponent<AABB>());
-            if (newDist < distance)
+            //If object goes out of scene bounds it gets deleted and is not calculated anymore
+            int newHash = HashIt(bound.Key.transform.position, out outOfBounds);
+            if (/*!buckets.ContainsKey(newHash) ||*/ outOfBounds)
             {
-                distance = newDist;
-                nearestNeighbour = aabb;
+                GameManager.Instance.FormOutOfBounds(bound.Key);
+                buckets[bound.Value].RemoveForm(bound.Key);
+                continue;
             }
-        }
-        
-        Debug.Log("Distance: " + distance + "| Object: " + nearestNeighbour.gameObject.name);
+            if (bound.Value != newHash)
+            {
+                buckets[bound.Value].RemoveForm(bound.Key);
+                buckets[newHash].AddForm(bound.Key);
+            }
 
-        return new KeyValuePair<AABB, float>(nearestNeighbour, distance);
+            newObjects.Add(bound.Key, newHash);
+        }
+        return newObjects;
     }
 
     private void HandlePlayerReady(GameObject player)
@@ -216,8 +210,8 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
         this.player = player;
     }
 
-    public INode FindNode(GameObject go)
+    private void UpdatePositionsAndHashes()
     {
-        return buckets[HashIt(go.transform.position)];
+        objects = AddToBuckets(objects);
     }
 }
