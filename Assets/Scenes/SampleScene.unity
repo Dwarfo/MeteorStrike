@@ -250,12 +250,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aa93f0faf5c74a48b1a7d92909c4c72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collision: 2
+  collision: 1
   meteorsNum: 10
   Meteor: {fileID: 3435628165809738514, guid: 79af67867467b8c44b3f7027ab97f69b, type: 3}
   Player: {fileID: 2442672912009337056, guid: 6fb2e5ff40556a841b2a1a20b5d48420, type: 3}
   WriteStats: 1
-  StaticSystem: 1
+  StaticSystem: 0
   timeToSimulate: 3
   tileSize: 0
   isDebuging: 0
@@ -297,7 +297,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   depth: 4
   size: 200
-  player: {fileID: 0}
 --- !u!114 &1715653978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,7 +311,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bucketSize: 8
   fieldSize: 50
-  player: {fileID: 0}
 --- !u!114 &1715653979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,7 +325,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: 20
   maxObjNum: 4
-  player: {fileID: 0}
 --- !u!114 &1715653980
 MonoBehaviour:
   m_ObjectHideFlags: 0

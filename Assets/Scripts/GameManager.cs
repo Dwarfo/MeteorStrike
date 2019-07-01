@@ -66,13 +66,13 @@ public class GameManager : Singleton_MB<GameManager> {
                 GameObject go = MakeMeteor(i, j);
                 go.name = go.name + namePart;
                 namePart++;
-                //CS.Insert(go);
+                CS.Insert(go);
                 staticObjects.Add(go);
              }
         }
         
         OnPlayerReady.Invoke(Instantiate(Player));
-        CS.InsertToStatic(staticObjects);
+        //CS.InsertToStatic(staticObjects);
     }
 
     private GameObject MakeMeteor(int i, int j)

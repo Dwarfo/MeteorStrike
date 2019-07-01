@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class RTreeCollsionSystem : MonoBehaviour, ICollisionSystem
 {
+    public void Build()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void CheckCollisions()
+    {
+        throw new System.NotImplementedException();
+    }
 
     public void Delete(GameObject obj)
     {

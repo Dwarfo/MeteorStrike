@@ -33,14 +33,11 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
         Build();
 
         frameCounter++;
-        if (frameCounter == 3)
-        {
-            collisionChecks = 0;
-            checkedBuckets = 0;
-            CheckCollisions();
-            frameCounter = 0;
-            UI.Instance.UpdateCollisionStatistics(collisionChecks);
-        }
+        collisionChecks = 0;
+        checkedBuckets = 0;
+        CheckCollisions();
+        frameCounter = 0;
+        UI.Instance.UpdateCollisionStatistics(collisionChecks);
 	}
     #region Interface_implementation
     //Root is irrelevant and nonexistant in hash table
@@ -53,8 +50,8 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
     {
         if(GameManager.Instance.StaticSystem)
             staticObjects = AddToBuckets(staticObjects);
-        objects = AddToBuckets(objects);
 
+        objects = AddToBuckets(objects);
     }
 
     public void Insert(GameObject go)

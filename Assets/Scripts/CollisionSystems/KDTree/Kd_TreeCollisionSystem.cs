@@ -36,8 +36,8 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
         count++;
         Build();
         //InsertInTree(player);
-        CheckCol();
-        GetNearestNeighbour(player);
+        CheckCollisions();
+        //GetNearestNeighbour();
         //Delete(player);
         return;
     }
@@ -76,13 +76,13 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
         {
             if (k == 0)
             {
-                currentNode = go.transform.position.x < children[0].maxX ? children[0] : children[1];
+                currentNode = go.transform.position.x < children[0].MaxVector.x ? children[0] : children[1];
                 children = (Kd_TreeNode[])currentNode.Children;
                 k++;
             }
             else
             {
-                currentNode = go.transform.position.y < children[0].maxY ? children[0] : children[1];
+                currentNode = go.transform.position.y < children[0].MaxVector.y ? children[0] : children[1];
                 children = (Kd_TreeNode[])currentNode.Children;
                 k = 0;
             }
@@ -140,11 +140,6 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
     }
 
     #endregion
-    
-    private void AddLeaf(Kd_TreeNode leaf)
-    {
-        leaves.Add(leaf);
-    }
 
     private void SortOnAxis()
     {
@@ -236,5 +231,15 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
     {
         foreach (GameObject go in objects)
             this.objects.Add(go.GetComponent<AABB>());
+    }
+
+    public void AddLeaf(Kd_TreeNode leaf)
+    {
+        leaves.Add(leaf);
+    }
+
+    public void AddObjects(int num)
+    {
+        numOfObjects += num;
     }
 }

@@ -31,10 +31,10 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
         if (GameManager.Instance.StaticSystem)
         {
             QuadTreeNode nodeWithPlayer;
-            nodeWithPlayer = qtree.Insert(player.GetComponent<AABB>(), player.transform.position);
+            //nodeWithPlayer = qtree.Insert(player.GetComponent<AABB>(), player.transform.position);
             CheckCollisions();
-            GetNearestNeighbour(player);
-            Delete(player);
+            //GetNearestNeighbour(player);
+            //Delete(player);
             return;
         }
 
@@ -60,7 +60,7 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
     public void Build()
     {
         qtree = new QuadTree(this.transform.position, size, depth);
-        leaves = new List<QuadTreeNode>();
+        leaves = new HashSet<QuadTreeNode>();
         
         foreach (var obj in objects)
         {
@@ -88,7 +88,7 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
 
         do
         {
-            subNodes = (QuadTreeNode[])currentNode.Nodes;
+            subNodes = (QuadTreeNode[])currentNode.Children;
             index = QuadTreeNode.GetIndexPosition(go.transform.position, currentNode.Position);
             currentNode = subNodes[index];
         } while (!currentNode.IsLeaf());
@@ -98,7 +98,7 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
 
     public void InsertToStatic(List<GameObject> staticGos)
     {
-        leaves = new List<QuadTreeNode>();
+        leaves = new HashSet<QuadTreeNode>();
         qtree = new QuadTree(transform.position, size, depth);
 
         foreach (GameObject go in staticGos)
@@ -126,7 +126,7 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
     {
         INode node = FindNode(obj);
         AABB objectBound = obj.GetComponent<AABB>();
-        AABB nearestNeighbour;
+        AABB nearestNeighbour = obj.GetComponent<AABB>();
         float distance = float.MaxValue;
 
         foreach (AABB aabb in node.Content)
@@ -164,10 +164,10 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
     {
         if (!node.IsLeaf())
         {
-            foreach (var subnode in node.Nodes)
+            foreach (var subnode in node.Children)
             {
                 if(subnode != null)
-                    DrawNode(subnode, nodeDepth + 1);
+                    DrawNode((QuadTreeNode)subnode, nodeDepth + 1);
             }
         }
 
