@@ -15,13 +15,10 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
     private int frameCounter = 0;
     private int collisionChecks = 0;
     private int checkedBuckets = 0;
-    [SerializeField]
-    private GameObject player;
 
     private void Awake()
     {
         base.Awake();
-        GameManager.Instance.OnPlayerReady.AddListener(HandlePlayerReady);
     }
     void Start ()
     {
@@ -206,11 +203,6 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
             newObjects.Add(bound.Key, newHash);
         }
         return newObjects;
-    }
-
-    private void HandlePlayerReady(GameObject player)
-    {
-        this.player = player;
     }
 
     private void UpdatePositionsAndHashes()

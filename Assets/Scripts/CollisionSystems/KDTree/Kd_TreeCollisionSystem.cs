@@ -6,8 +6,6 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
 
     public float size;
     public int maxObjNum = 4;
-    public GameObject player;
-
     //K - index of an axis, 1 is max
     private int count = 0;
     private List<AABB> objects = new List<AABB>();
@@ -24,14 +22,12 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
     private void Awake()
     {
         base.Awake();
-        GameManager.Instance.OnPlayerReady.AddListener(HandlePlayerReady);
     }
 
     void Start ()
     {
         
     }
-	
 	// Update is called once per frame
 	void Update ()
     {
@@ -240,11 +236,5 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
     {
         foreach (GameObject go in objects)
             this.objects.Add(go.GetComponent<AABB>());
-    }
-
-    private void HandlePlayerReady(GameObject player)
-    {
-        this.player = player;
-        Insert(player);
     }
 }

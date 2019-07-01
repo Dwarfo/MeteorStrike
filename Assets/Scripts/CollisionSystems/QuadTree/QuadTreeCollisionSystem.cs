@@ -6,7 +6,6 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
 
     public int depth = 2;
     public float size = 5;
-    public GameObject player;
 
     private List<AABB> objects = new List<AABB>();
     public HashSet<QuadTreeNode> leaves;
@@ -19,7 +18,6 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
     private void Awake()
     {
         base.Awake();
-        GameManager.Instance.OnPlayerReady.AddListener(HandlePlayerReady);
     }
     private void Start()
     {
@@ -180,12 +178,6 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
     public void AddObjects(int num)
     {
         numOfObjects += num;
-    }
-
-    private void HandlePlayerReady(GameObject player)
-    {
-        this.player = player;
-        Insert(player);
     }
 
 }
