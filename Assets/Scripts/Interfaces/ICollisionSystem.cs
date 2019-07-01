@@ -11,5 +11,5 @@ public interface ICollisionSystem  {
     void InsertToStatic(List<GameObject> staticGos);
     KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj);
     INode FindNode(GameObject go);
-
+    void CheckCollisions();
 }

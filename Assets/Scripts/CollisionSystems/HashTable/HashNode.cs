@@ -20,13 +20,7 @@ public class HashNode : INode
         get { return position; }
     }
 
-    public IEnumerable<INode> Children
-    {
-        get
-        {
-            return null;
-        }
-    }
+    public IEnumerable<INode> Children { get { return null; } }
 
     public List<AABB> Content { get { return content; } }
 

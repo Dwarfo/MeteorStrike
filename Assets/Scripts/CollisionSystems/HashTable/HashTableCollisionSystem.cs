@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-
-//Check inside of a bucket via BVH algorithm
 public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, ICollisionSystem {
 
     public float bucketSize;
@@ -31,13 +29,11 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
         if (fieldSize % 2 != 0)
             fieldSize++;
         BuildBuckets();
-        if(GameManager.Instance.StaticSystem)
-            AddToBuckets(staticObjects);
     }
 	
 	void Update ()
     {
-        UpdatePositionsAndHashes();
+        Build();
 
         frameCounter++;
         if (frameCounter == 3)
@@ -48,9 +44,6 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
             frameCounter = 0;
             UI.Instance.UpdateCollisionStatistics(collisionChecks);
         }
-
-        //GetNearestNeighbour(player.GetComponent<AABB>());
-
 	}
 
     //GameObject is added to dict of all objects with a hash representing it's position
@@ -91,8 +84,6 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
             if (bound.Value != newHash)
             {
                 buckets[bound.Value].RemoveForm(bound.Key);
-
-                //Delete(buckets[bound.Value], bound.Key);
                 buckets[newHash].AddForm(bound.Key);
             }
 
@@ -102,7 +93,7 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
     }
 
     //if bucket contains more than 1 object forcecheck collision between them
-    private void CheckCollisions()
+    public void CheckCollisions()
     {
         foreach (var node in buckets.Values)
         {
@@ -135,10 +126,16 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
                 buckets.Add(node.hashNum, node);
             }
         }
-        
-        //buckets.Add(-1, new HashNode(new Vector2(float.MaxValue, float.MaxValue), -1));
     }
 
+    //In hashTable there is no need to rebuild buckets, but rather to only recalculate hashes of objects
+    public void Build()
+    {
+        if(GameManager.Instance.StaticSystem)
+            staticObjects = AddToBuckets(staticObjects);
+        objects = AddToBuckets(objects);
+
+    }
     //Simple 2D hash
     private int HashIt(Vector2 position)
     {
@@ -172,7 +169,7 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
         Gizmos.DrawWireCube(node.Position, new Vector3(0.95f, 0.95f, 0.1f) * bucketSize);
     }
 
-    //Root is irrelevant in hash table
+    //Root is irrelevant and nonexistant in hash table
     public INode GetRoot()
     {
         return null;
@@ -221,7 +218,6 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
 
     public INode FindNode(GameObject go)
     {
-        int hashOfAAbb = HashIt(go.transform.position);
-        return buckets[hashOfAAbb];
+        return buckets[HashIt(go.transform.position)];
     }
 }

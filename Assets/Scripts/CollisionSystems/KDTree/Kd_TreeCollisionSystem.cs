@@ -35,33 +35,15 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
 	// Update is called once per frame
 	void Update ()
     {
-        if (GameManager.Instance.StaticSystem)
-        {
-            collisionChecks = 0;
-            numOfObjects = 0;
-            count++;
-            SortOnAxis();
-            BuildTree();
-            //InsertInTree(player);
-            CheckCol();
-            GetNearestNeighbour(player);
-            //Delete(player);
-            return;
-        }
-        //Debug.Log("Number of leaves: " + leaves.Count);
         collisionChecks = 0;
+        numOfObjects = 0;
         count++;
-        //CheckCol();
-        //DrawDebugz();
-        //if (count % 3 == 0 && objects.Count != 0)
-        //{
-            numOfObjects = 0;
-            SortOnAxis();
-            BuildTree();
-            CheckCol();
+        Build();
+        //InsertInTree(player);
+        CheckCol();
         GetNearestNeighbour(player);
+        //Delete(player);
         return;
-        //}
     }
 
     public void Insert(GameObject obj)
@@ -80,14 +62,15 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
             this.objects.Add(go.GetComponent<AABB>());
     }
 
-    private void BuildTree()
+    public void Build()
     {
+        SortOnAxis();
         leaves.Clear();
         root = new Kd_TreeNode();
         root.Divide(sortedX, sortedY, 0);
     }
 
-    private void CheckCol()
+    public void CheckCollisions()
     {
         foreach (Kd_TreeNode lst in leaves)
             collisionChecks += BoundsInteraction.CheckN2(lst.Content);
@@ -100,7 +83,7 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
         }
     }
 
-    public void AddLeaf(Kd_TreeNode leaf)
+    private void AddLeaf(Kd_TreeNode leaf)
     {
         leaves.Add(leaf);
     }
@@ -114,9 +97,6 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
     {
         sortedX = new List<AABB>(objects);
         sortedY = new List<AABB>(objects);
-        //sortedX.Sort((p1, p2) => (p1.transform.position.x).CompareTo(p2.transform.position.x));
-        //sortedY.Sort((p1, p2) => (p1.transform.position.y).CompareTo(p2.transform.position.y));
-        
 
         sortedX.Sort(delegate (AABB p1, AABB p2)
         {
@@ -135,21 +115,6 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
             else
                 return 0;
         });
-
-        /*string debugstr = "";
-
-        for (int i = 0; i < sortedX.Count; i++)
-        {
-            debugstr += sortedX[i].gameObject.transform.position.x + " ";
-        }
-        Debug.Log("SortedX " + debugstr);
-        debugstr = "";
-        for (int i = 0; i < sortedY.Count; i++)
-        {
-            debugstr += sortedY[i].gameObject.transform.position.y + " ";
-        }
-        Debug.Log("SortedY " + debugstr);
-        */
     }
 
     private void DrawDebugz() {
@@ -157,21 +122,15 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
         Debug.Log("Leaves " + leaves.Count);
         foreach (Kd_TreeNode node in leaves)
         {  
-            //Vector2[] ends = GetBoundsOfLeaves(node.children);
-
             string debugstr = "";
             foreach (AABB aabb in node.Content)
             {
                 debugstr += aabb.gameObject.name + " ";
                 Debug.Log("Group " + debugstr);
-
-            }
-            
-        }
-      
+            } 
+        }      
     }
 
-    //Prettty much working
     private void OnDrawGizmos()
     {
         var cachedLeaves = leaves;
@@ -181,7 +140,6 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
         {
             foreach (Kd_TreeNode node in cachedLeaves)
             {
-
                 Vector2[] ends = GetBoundsOfLeaves(node.Content);
 
                 Gizmos.color = Color.blue;
@@ -213,12 +171,7 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
         Vector2 min = new Vector2(minx, miny);
         Vector2 max = new Vector2(maxx, maxy);
 
-        return new Vector2[2] { min,max};
-    }
-
-    public void AddObjects(int obj)
-    {
-        numOfObjects += obj;
+        return new Vector2[2] {min,max};
     }
     public Framestats GetStats()
     {

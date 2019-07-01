@@ -54,7 +54,7 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
             count++;
     }
 
-    private void CheckCollisions()
+    public void CheckCollisions()
     {
         foreach (var node in leaves)
         {
@@ -151,12 +151,12 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
         this.player = player;
         Insert(player);
     }
-    // Make this method for interface with types like in quad tree
+
     public KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj)
     {
         INode node = FindNode(obj);
         AABB objectBound = obj.GetComponent<AABB>();
-        AABB nearestNeighbour = objectBound;
+        AABB nearestNeighbour;
         float distance = float.MaxValue;
 
         foreach (AABB aabb in node.Content)
