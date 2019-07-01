@@ -46,6 +46,8 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
         return;
     }
 
+    #region Interface_implementation
+
     public INode GetRoot()
     {
         return root;
@@ -141,6 +143,8 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
         return (new Framestats(GameManager.Instance.GetExecTime(), Time.deltaTime, collisionChecks, numOfObjects));
     }
 
+    #endregion
+    
     private void AddLeaf(Kd_TreeNode leaf)
     {
         leaves.Add(leaf);

@@ -45,7 +45,7 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
             UI.Instance.UpdateCollisionStatistics(collisionChecks);
         }
 	}
-
+    #region Interface_implementation
     //Root is irrelevant and nonexistant in hash table
     public INode GetRoot()
     {
@@ -130,6 +130,9 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
     {
         return (new Framestats(GameManager.Instance.GetExecTime(), Time.deltaTime, collisionChecks, checkedBuckets));
     }
+
+    #endregion
+    
     //Initially create buckets according to the size of field defined by fieldSize
     private void BuildBuckets()
     {

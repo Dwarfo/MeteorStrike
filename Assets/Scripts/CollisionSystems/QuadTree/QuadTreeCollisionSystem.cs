@@ -52,6 +52,8 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
             count++;
     }
 
+    #region Interface_implementation
+
     public INode GetRoot()
     {
         return qtree.GetRoot();
@@ -152,6 +154,8 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
         return (new Framestats(GameManager.Instance.GetExecTime(), Time.deltaTime, collisionChecks, numOfObjects));
     }
 
+    #endregion
+    
     private void OnDrawGizmos()
     {
         if (qtree != null)
