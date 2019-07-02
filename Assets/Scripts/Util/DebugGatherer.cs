@@ -67,7 +67,7 @@ public class DebugGatherer
         {
             debugLinesBuilder.Append("Frame was executed in: " + deltaTime + " ms");
             if(framerate != -1)
-                debugLinesBuilder.Append(" with framerate of " + framerate + nl);
+                debugLinesBuilder.Append(" with framerate of " + framerate + " ms" + nl);
             else
                 debugLinesBuilder.Append(nl);
         }
