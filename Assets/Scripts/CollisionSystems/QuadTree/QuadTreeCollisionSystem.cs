@@ -54,6 +54,7 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
 
     public int CollisionChecks { get {return collisionChecks; } }
     public int NumOfObjects { get {return numOfObjects; } }
+    public string ColSysName { get {return "Quad_tree"; } }
 
     public INode GetRoot()
     {

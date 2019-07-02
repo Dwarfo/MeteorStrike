@@ -6,6 +6,7 @@ public interface ICollisionSystem  {
 
     int CollisionChecks { get; }
     int NumOfObjects { get; }
+    string ColSysName { get; }
     INode GetRoot();
     void Build();
     void Insert(GameObject node);

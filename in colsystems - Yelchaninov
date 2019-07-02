@@ -1,0 +1,24 @@
+* [1;34mae3478f[m - [1;36mTue, 2 Jul 2019 11:28:40 +0200[m [1;32m(2 minutes ago)[m[1;33m (HEAD -> Generalizing_Debug)[m
+[31m|[m           [37mCreated common debugline building class, made getters for info fields in colsystem classes and interface[m [2;37m- Yelchaninov[m
+* [1;34mc8085b7[m - [1;36mMon, 1 Jul 2019 19:41:17 +0200[m [1;32m(16 hours ago)[m[1;33m (origin/master, origin/HEAD, master)[m
+[31m|[m           [37mBugfixing[m [2;37m- Denis Yelchaninov[m
+[31m|[m * [1;34m63ee201[m - [1;36mTue, 2 Jul 2019 09:27:36 +0200[m [1;32m(2 hours ago)[m[1;33m (BeautifyAndAddBuild)[m
+[31m|[m[31m/[m            [37maftermerge[m [2;37m- Yelchaninov[m
+* [1;34mc690f10[m - [1;36mMon, 1 Jul 2019 15:43:18 +0200[m [1;32m(20 hours ago)[m[1;33m (origin/BeautifyAndAddBuild)[m
+[32m|[m           [37mDeleted unneeded player references in colsystems[m [2;37m- Yelchaninov[m
+* [1;34mc0e7237[m - [1;36mMon, 1 Jul 2019 14:29:32 +0200[m [1;32m(21 hours ago)[m[1;33m[m
+[32m|[m           [37mAdded regions to quickly collapse implemented code[m [2;37m- Yelchaninov[m
+* [1;34m23bfd26[m - [1;36mMon, 1 Jul 2019 13:43:09 +0200[m [1;32m(22 hours ago)[m[1;33m[m
+[32m|[m           [37mJust pushed methods in nodes according to their placement in interfaces[m [2;37m- Yelchaninov[m
+* [1;34mf11ad37[m - [1;36mMon, 1 Jul 2019 13:29:48 +0200[m [1;32m(22 hours ago)[m[1;33m[m
+[32m|[m           [37mJust pushed methods in colSystems according to their placement in interface[m [2;37m- Yelchaninov[m
+* [1;34m4032763[m - [1;36mMon, 1 Jul 2019 11:15:42 +0200[m [1;32m(24 hours ago)[m[1;33m[m
+[32m|[m           [37mAdded build in all systems, and made some refactoring[m [2;37m- Yelchaninov[m
+* [1;34m37b3db5[m - [1;36mMon, 1 Jul 2019 10:29:10 +0200[m [1;32m(25 hours ago)[m[1;33m[m
+[32m|[m           [37mAdded build in QuadTree and made quadindexing static[m [2;37m- Yelchaninov[m
+* [1;34m4acaea5[m - [1;36mSun, 30 Jun 2019 20:55:27 +0200[m [1;32m(2 days ago)[m[1;33m[m
+[32m|[m           [37mGeneralization[m [2;37m- Denis Yelchaninov[m
+* [1;34m243e22f[m - [1;36mTue, 25 Jun 2019 22:07:52 +0200[m [1;32m(7 days ago)[m[1;33m[m
+[32m|[m           [37mAdded common methods for nearest neihbour search in interface and implemented in quad tree[m [2;37m- Denis Yelchaninov[m
+* [1;34mca733d0[m - [1;36mThu, 20 Jun 2019 21:29:52 +0200[m [1;32m(12 days ago)[m[1;33m[m
+            [37mInitial commit[m [2;37m- Denis Yelchaninov[m

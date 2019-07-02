@@ -59,6 +59,7 @@ public class DebugGatherer
 
     public String WholeDebugInfo()
     {
+        debugLinesBuilder.Append("Collision system " + GameManager.Instance.CS.ColSysName + " is tested" + nl);
         if(time != -1)
             debugLinesBuilder.Append("Debug info was captured at: " + time + " ms" + nl);
         if(deltaTime != -1)

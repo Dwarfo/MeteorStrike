@@ -41,7 +41,7 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
     
     public int CollisionChecks { get {return collisionChecks; } }
     public int NumOfObjects { get {return checkedBuckets; } }
-
+    public string ColSysName { get {return "Hash_table"; } }
     //Root is irrelevant and nonexistant in hash table
     public INode GetRoot()
     {
