@@ -21,6 +21,7 @@ public class GameManager : Singleton_MB<GameManager> {
     private int namePart = 0;
     private ICollisionSystem CS;
     private List<AsyncOperation> loadOperations;
+    private DebugGatherer debugGatherer = new DebugGatherer();
 
     public GameObjectEvent OnPlayerReady;
     public AABBEvent OnOutOfBounds;
@@ -48,9 +49,18 @@ public class GameManager : Singleton_MB<GameManager> {
             written = false;
         }
 
+        debugGatherer.InitDebug();
+
         CS.Build();
         CS.CheckCollisions();
-	}
+
+        debugGatherer.time = execTime;
+        debugGatherer.deltaTime = Time.deltaTime;
+        debugGatherer.n2calculations = CS.CollisionChecks;
+        debugGatherer.numberOfObjects = CS.NumOfObjects;
+
+        Debug.Log(debugGatherer.WholeDebugInfo());
+    }
 
     public ICollisionSystem ColSys { get{ return CS; } }
     private void GenerateField()
