@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class RTreeCollsionSystem : MonoBehaviour, ICollisionSystem
 {
+    public int CollisionChecks => throw new System.NotImplementedException();
+
+    public int NumOfObjects => throw new System.NotImplementedException();
+
+    public string ColSysName => throw new System.NotImplementedException();
+
     public void Build()
     {
         throw new System.NotImplementedException();

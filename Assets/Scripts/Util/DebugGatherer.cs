@@ -4,7 +4,7 @@ using System.Text;
 
 public class DebugGatherer 
 {
-    private const String nl = System.Environment.NewLine;
+    private string nl = System.Environment.NewLine;
     private StringBuilder debugLinesBuilder = new StringBuilder();
     private bool hasNearestNeighbourDebug = false;
     private bool hasCollisioninfoDebug = false;
@@ -22,7 +22,7 @@ public class DebugGatherer
     public float buildExecTime = -1;
     public KeyValuePair<AABB, float> nearestNeighbourInfo;
 
-    private void GetFrameStats(FrameStats fs)
+    private void GetFrameStats(Framestats fs)
     {
 
     }
@@ -43,14 +43,12 @@ public class DebugGatherer
         nearestNeighbourExecTime = -1;
         colCheckExecTime = -1;
         buildExecTime = -1;
-        nearestNeighbourInfo = null;
     }
 
-    public SetFrameInfo(FrameStats frameStats)
+    public void SetFrameInfo(Framestats frameStats)
     {
         time = frameStats.time;
         deltaTime = frameStats.deltaTime;
-        
     }
     
     public void InfoOnNearestNeighbour(KeyValuePair<AABB, float> neigbhourDistance)
@@ -58,9 +56,9 @@ public class DebugGatherer
         
     }
 
-    public String WholeDebugInfo()
+    public string WholeDebugInfo()
     {
-        debugLinesBuilder.Append("Collision system " + GameManager.Instance.CS.ColSysName + " is tested" + nl);
+        debugLinesBuilder.Append("Collision system " + GameManager.Instance.ColSys.ColSysName + " is tested" + nl);
         if(time != -1)
             debugLinesBuilder.Append("Debug info was captured at: " + time + " ms" + nl);
         if(deltaTime != -1)
@@ -77,16 +75,16 @@ public class DebugGatherer
             debugLinesBuilder.Append("Hard calculations took " + colCheckExecTime + " ms" + nl);
         if(numberOfObjects != -1)
         {
-            debugLinesBuilder.Append("Structure created has " + numberOfObjects + " nodes of type" + GameManager.Instance.CS.GetRoot().NodeType + nl);
+            debugLinesBuilder.Append("Structure created has " + numberOfObjects + " nodes of type" + GameManager.Instance.ColSys.GetRoot().NodeType + nl);
             if(buildExecTime != -1)
                 debugLinesBuilder.Append("That was built in : " + buildExecTime + " ms" + nl);
         }
         if(nearestNeighbourExecTime != -1)
         {
             debugLinesBuilder.Append("Nearest neighbour was found in " + nearestNeighbourExecTime + " ms" + nl);
-            debugLinesBuilder.Append("Nearest neighbour is " + nearestNeighbourInfo.Key.gameObject.Name + " with a distance of " + nearestNeighbourInfo.Value + nl);    
+            debugLinesBuilder.Append("Nearest neighbour is " + nearestNeighbourInfo.Key.gameObject.name + " with a distance of " + nearestNeighbourInfo.Value + nl);    
         }
 
-        return debugLinesBuilder;
+        return debugLinesBuilder.ToString();
     }
 }

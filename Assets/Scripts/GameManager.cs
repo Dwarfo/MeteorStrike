@@ -52,6 +52,7 @@ public class GameManager : Singleton_MB<GameManager> {
         CS.CheckCollisions();
 	}
 
+    public ICollisionSystem ColSys { get{ return CS; } }
     private void GenerateField()
     {
         if (meteorsNum % 2 != 0)
