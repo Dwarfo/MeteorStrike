@@ -19,6 +19,8 @@ public class Kd_TreeNode : INode  {
     public List<AABB> Content { get { return content; } }
     public Vector2 Position { get { return new Vector2((minX + maxX)/2, (minY + maxY)/2);} }
     public Vector2 MaxVector { get { return new Vector2(maxX, maxY); } }
+    public string NodeType { get {return "KDNode";} }
+
     public bool IsLeaf()
     {
         return isLeaf;

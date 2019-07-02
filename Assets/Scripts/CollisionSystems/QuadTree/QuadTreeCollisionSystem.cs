@@ -42,8 +42,8 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
         {
             numOfObjects = 0;
             collisionChecks = 0;
-            Build();
-            CheckCollisions();
+            //Build();
+            //CheckCollisions();
             count = 0;
         }
         else
@@ -51,6 +51,9 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
     }
 
     #region Interface_implementation
+
+    public int CollisionChecks { get {return collisionChecks; } }
+    public int NumOfObjects { get {return numOfObjects; } }
 
     public INode GetRoot()
     {

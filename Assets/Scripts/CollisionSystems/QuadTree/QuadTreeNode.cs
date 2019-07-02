@@ -29,6 +29,7 @@ public class QuadTreeNode : INode {
     public List<AABB> Content { get { return content; } }
     public Vector2 Position { get { return position; } }
     public float Size { get { return size; } }
+    public string NodeType { get {return "QuadTreeNode";} }
 
     public bool IsLeaf()
     {

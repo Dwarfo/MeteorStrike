@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -30,20 +31,21 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
 	
 	void Update ()
     {
-        Build();
-
         frameCounter++;
         collisionChecks = 0;
         checkedBuckets = 0;
-        CheckCollisions();
         frameCounter = 0;
         UI.Instance.UpdateCollisionStatistics(collisionChecks);
 	}
     #region Interface_implementation
+    
+    public int CollisionChecks { get {return collisionChecks; } }
+    public int NumOfObjects { get {return checkedBuckets; } }
+
     //Root is irrelevant and nonexistant in hash table
     public INode GetRoot()
     {
-        return null;
+        return buckets[0];
     }
     //In hashTable there is no need to rebuild buckets, but rather to only recalculate hashes of objects
     public void Build()
@@ -206,4 +208,5 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
     {
         objects = AddToBuckets(objects);
     }
+
 }

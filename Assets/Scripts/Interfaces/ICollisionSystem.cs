@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface ICollisionSystem  {
 
+    int CollisionChecks { get; }
+    int NumOfObjects { get; }
     INode GetRoot();
     void Build();
     void Insert(GameObject node);

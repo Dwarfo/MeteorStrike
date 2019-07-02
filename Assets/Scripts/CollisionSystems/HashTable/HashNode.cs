@@ -17,7 +17,8 @@ public class HashNode : INode
     public IEnumerable<INode> Children { get { return null; } }
     public List<AABB> Content { get { return content; } }
     public Vector2 Position { get { return position; } }
-
+    public string NodeType { get {return "HashNode";} }
+    
     public bool IsLeaf()
     {
         return false;

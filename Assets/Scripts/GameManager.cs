@@ -47,6 +47,9 @@ public class GameManager : Singleton_MB<GameManager> {
             StatsExcelSender.Instance.WriteToFile("D:\\UnityPrj\\newStats1.xml");
             written = false;
         }
+
+        CS.Build();
+        CS.CheckCollisions();
 	}
 
     private void GenerateField()

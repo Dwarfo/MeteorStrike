@@ -34,15 +34,12 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
         collisionChecks = 0;
         numOfObjects = 0;
         count++;
-        Build();
-        //InsertInTree(player);
-        CheckCollisions();
-        //GetNearestNeighbour();
-        //Delete(player);
         return;
     }
 
     #region Interface_implementation
+    public int CollisionChecks { get {return collisionChecks; } }
+    public int NumOfObjects { get {return numOfObjects; } }
 
     public INode GetRoot()
     {
@@ -101,12 +98,12 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
         foreach (Kd_TreeNode lst in leaves)
             collisionChecks += BoundsInteraction.CheckN2(lst.Content);
 
-        Framestats fst = GetStats();
+        /* Framestats fst = GetStats();
         //Debug.Log("Deltatime: " + fst.deltaTime + " Framerate: " + fst.framerate);
         if (GameManager.Instance.WriteStats)
         {
             StatsExcelSender.Instance.WriteStat(GetStats());
-        }
+        } */
     }
 
     public KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj)
