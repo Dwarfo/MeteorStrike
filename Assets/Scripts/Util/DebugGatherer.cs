@@ -29,7 +29,7 @@ public class DebugGatherer
 
     public void InitDebug()
     {
-        debugLinesBuilder = new StringBuilder();
+        debugLinesBuilder.Clear();
         hasNearestNeighbourDebug = false;
         hasCollisioninfoDebug = false;
         hasTimeInfoDebug = false;
@@ -43,6 +43,7 @@ public class DebugGatherer
         nearestNeighbourExecTime = -1;
         colCheckExecTime = -1;
         buildExecTime = -1;
+        nearestNeighbourInfo = null;
     }
 
     public SetFrameInfo(FrameStats frameStats)
@@ -52,7 +53,7 @@ public class DebugGatherer
         
     }
     
-    public void InfoOnNearestNeighbour(KeyValuePair<AABBEvent,float> neigbhourDistance)
+    public void InfoOnNearestNeighbour(KeyValuePair<AABB, float> neigbhourDistance)
     {
         
     }
@@ -85,7 +86,6 @@ public class DebugGatherer
             debugLinesBuilder.Append("Nearest neighbour was found in " + nearestNeighbourExecTime + " ms" + nl);
             debugLinesBuilder.Append("Nearest neighbour is " + nearestNeighbourInfo.Key.gameObject.Name + " with a distance of " + nearestNeighbourInfo.Value + nl);    
         }
-
 
         return debugLinesBuilder;
     }
