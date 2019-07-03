@@ -255,7 +255,7 @@ MonoBehaviour:
   Meteor: {fileID: 3435628165809738514, guid: 79af67867467b8c44b3f7027ab97f69b, type: 3}
   Player: {fileID: 2442672912009337056, guid: 6fb2e5ff40556a841b2a1a20b5d48420, type: 3}
   WriteStats: 1
-  StaticSystem: 0
+  StaticSystem: 1
   timeToSimulate: 3
   tileSize: 0
   isDebuging: 0
@@ -452,6 +452,71 @@ PrefabInstance:
     - target: {fileID: 6518729011550716263, guid: 829ecb5f79be210479d9c1767f6d9a0e,
         type: 3}
       propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518729012135926822, guid: 829ecb5f79be210479d9c1767f6d9a0e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518729012934754624, guid: 829ecb5f79be210479d9c1767f6d9a0e,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518729012934754624, guid: 829ecb5f79be210479d9c1767f6d9a0e,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518729012934754624, guid: 829ecb5f79be210479d9c1767f6d9a0e,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518729013278442020, guid: 829ecb5f79be210479d9c1767f6d9a0e,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518729012650365431, guid: 829ecb5f79be210479d9c1767f6d9a0e,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518729012650365431, guid: 829ecb5f79be210479d9c1767f6d9a0e,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518729012883182967, guid: 829ecb5f79be210479d9c1767f6d9a0e,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518729012883182967, guid: 829ecb5f79be210479d9c1767f6d9a0e,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518729012883182967, guid: 829ecb5f79be210479d9c1767f6d9a0e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518729012883182967, guid: 829ecb5f79be210479d9c1767f6d9a0e,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518729012883182967, guid: 829ecb5f79be210479d9c1767f6d9a0e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518729012883182967, guid: 829ecb5f79be210479d9c1767f6d9a0e,
+        type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

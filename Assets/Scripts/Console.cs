@@ -53,12 +53,12 @@ public class Console : Singleton_MB<Console> {
 
     public void CreateCommands()
     {
-        AddNewCommand(new QuitCommand.CreateCommand());
-        AddNewCommand(new CreateMeteorCommand.CreateCommand());
-        AddNewCommand(new BuildCommand.CreateCommand());
-        AddNewCommand(new CheckCollsCommand.CreateCommand());
-        AddNewCommand(new NearestNeighbourCommand.CreateCommand());
-        AddNewCommand(new WriteDebugCommand.CreateCommand());
+        AddNewCommand(new QuitCommand());
+        AddNewCommand(new CreateMeteorCommand());
+        AddNewCommand(new BuildCommand());
+        AddNewCommand(new CheckCollsCommand());
+        AddNewCommand(new NearestNeighbourCommand());
+        AddNewCommand(new WriteDebugCommand());
     }
 
     private void AddNewCommand(ConsoleCommand cc)
@@ -115,11 +115,10 @@ public abstract class ConsoleCommand
     public abstract string Description { get; protected set; }
     public abstract string Help { get; protected set; }
     public string[] args;
-    public AdditionalCommand[] ac;
 
     public void AddCommandToConsole(Console console)
     {
-        console.AddCommandToConsole(this.Name, this);
+        console.AddCommandToConsole(this);
         string addMesage = " command has been added to the console.";
 
     }

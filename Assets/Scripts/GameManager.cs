@@ -51,8 +51,8 @@ public class GameManager : Singleton_MB<GameManager> {
 
         debugGatherer.InitDebug();
 
-        CS.Build();
-        CS.CheckCollisions();
+        //CS.Build();
+        //CS.CheckCollisions();
 
         debugGatherer.time = execTime;
         debugGatherer.deltaTime = Time.deltaTime;

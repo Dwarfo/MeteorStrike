@@ -24,7 +24,7 @@ public class BuildCommand : ConsoleCommand
         {
             GameManager.Instance.ColSys.Build();
             Console.Instance.AddMessageToConsole(GameManager.Instance.ColSys.ColSysName + " was build with "
-                + GameManager.Instance.ColSys.NumOfObjects + " " + GameManager.Instance.ColSys.GetRoot().NodeType) + " nodes.";    
+                + GameManager.Instance.ColSys.NumOfObjects + " " + GameManager.Instance.ColSys.GetRoot().NodeType + " nodes.");    
         }
         else
             Console.Instance.AddMessageToConsole("There is no collision system chosen to build");
