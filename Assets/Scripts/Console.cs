@@ -15,7 +15,6 @@ public class Console : Singleton_MB<Console> {
     public Dictionary<string, ConsoleCommand> Commands;
 
 	// Use this for initialization
-
 	
 	// Update is called once per frame
 	void Update ()
@@ -54,15 +53,22 @@ public class Console : Singleton_MB<Console> {
 
     public void CreateCommands()
     {
-        QuitCommand c = QuitCommand.CreateCommand();
-        CreateMeteorCommand c1 = CreateMeteorCommand.CreateCommand();
-        Commands.Add(c.Command, c);
-        Commands.Add(c1.Command, c1);
+        AddNewCommand(new QuitCommand.CreateCommand());
+        AddNewCommand(new CreateMeteorCommand.CreateCommand());
+        AddNewCommand(new BuildCommand.CreateCommand());
+        AddNewCommand(new CheckCollsCommand.CreateCommand());
+        AddNewCommand(new NearestNeighbourCommand.CreateCommand());
+        AddNewCommand(new WriteDebugCommand.CreateCommand());
     }
 
-    public void AddCommandToConsole(string name, ConsoleCommand command)
+    private void AddNewCommand(ConsoleCommand cc)
     {
-        if (!Commands.ContainsKey(name))
+        Commands.Add(cc.Command, cc);
+    }
+
+    public void AddCommandToConsole(ConsoleCommand command)
+    {
+        if (!Commands.ContainsKey(command.Command))
         {
             Commands.Add(name, command);
         }
@@ -89,7 +95,7 @@ public class Console : Singleton_MB<Console> {
         }
         else
         {
-            Commands[inputs[0]].RunCommand();
+            Commands[inputs[0]].RunCommand(inputs);
         }
 
         consoleInput.DeactivateInputField();
@@ -108,6 +114,8 @@ public abstract class ConsoleCommand
     public abstract string Command { get; protected set; }
     public abstract string Description { get; protected set; }
     public abstract string Help { get; protected set; }
+    public string[] args;
+    public AdditionalCommand[] ac;
 
     public void AddCommandToConsole(Console console)
     {
@@ -116,7 +124,7 @@ public abstract class ConsoleCommand
 
     }
 
-    public abstract void RunCommand();
+    public abstract void RunCommand(string[] args);
 
 
 

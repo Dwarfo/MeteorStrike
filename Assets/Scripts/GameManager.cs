@@ -178,6 +178,11 @@ public class GameManager : Singleton_MB<GameManager> {
     {
         return this.execTime;
     }
+
+    public string GetDebugInfo()
+    {
+        return debugGatherer.WholeDebugInfo();
+    }
 }
 
 

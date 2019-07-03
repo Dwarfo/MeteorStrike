@@ -18,7 +18,7 @@ public class QuitCommand : ConsoleCommand
         AddCommandToConsole(Console.Instance);
     }
 
-    public override void RunCommand()
+    public override void RunCommand(string[] args)
     {
         if (Application.isEditor)
         {
