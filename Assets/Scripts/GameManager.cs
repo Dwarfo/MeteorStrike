@@ -201,7 +201,7 @@ public class GameManager : Singleton_MB<GameManager> {
     {
         if(CS.ColSysName != ChooseCollision().ColSysName)
         {
-            //CS.getGameObject.active = false;
+            CS = null;
             CS = ChooseCollision();
         }
     }
