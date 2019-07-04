@@ -68,7 +68,7 @@ public class SaPCollisionSystem : MonoBehaviour, ICollisionSystem {
         foreach (GameObject go in staticGos)
             objects.Add(go.GetComponent<AABB>());
     }
-    
+
     public void CheckCollisions()
     {
         List<AABB> currentlyChecking = new List<AABB>();
@@ -103,25 +103,14 @@ public class SaPCollisionSystem : MonoBehaviour, ICollisionSystem {
 
     public KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj)
     {
-        INode node = FindNode(obj);
+        if(!objects.Contains(obj))
+            objects.Add(obj);
+        Build();
         AABB objectBound = obj.GetComponent<AABB>();
         AABB nearestNeighbour = objectBound;
         float distance = float.MaxValue;
 
-        foreach (AABB aabb in node.Content)
-        {
-            if (aabb.Equals(objectBound))
-                continue;
-
-            float newDist = BoundsInteraction.GetDistance(aabb, objectBound);
-            if (newDist < distance)
-            {
-                distance = newDist;
-                nearestNeighbour = aabb;
-            }
-        }
-
-        Debug.Log("Distance: " + distance + "| Object: " + nearestNeighbour.gameObject.name);
+        //Debug.Log("Distance: " + distance + "| Object: " + nearestNeighbour.gameObject.name);
 
         return new KeyValuePair<AABB, float>(nearestNeighbour, distance);
     }
