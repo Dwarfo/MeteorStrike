@@ -205,7 +205,6 @@ public class GameManager : Singleton_MB<GameManager> {
             CS = ChooseCollision();
         }
     }
-
 }
 
 
