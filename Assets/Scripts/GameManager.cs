@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton_MB<GameManager> {
 
-    public CollisionSystems collision = CollisionSystems.HashTable;
     public int meteorsNum;
     public GameObject Meteor;
     public GameObject Player;
@@ -38,6 +37,7 @@ public class GameManager : Singleton_MB<GameManager> {
         CS = ChooseCollision();
 
         GenerateField();
+        
     }
 	
 	void Update ()
@@ -60,6 +60,7 @@ public class GameManager : Singleton_MB<GameManager> {
         debugGatherer.numberOfObjects = CS.NumOfObjects;
 
         Debug.Log(debugGatherer.WholeDebugInfo());
+        ColSystemChanged();
     }
 
     public ICollisionSystem ColSys { get{ return CS; } }
@@ -178,6 +179,16 @@ public class GameManager : Singleton_MB<GameManager> {
     {
         return this.execTime;
     }
+
+    private void ColSystemChanged()
+    {
+        if(CS.ColSysName != ChooseCollision().ColSysName)
+        {
+            CS.getGameObject.enabled = false;
+            CS = ChooseCollision();
+        }
+    }
+
 }
 
 

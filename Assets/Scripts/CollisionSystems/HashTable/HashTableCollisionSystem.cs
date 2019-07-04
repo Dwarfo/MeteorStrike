@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, ICollisionSystem {
+public class HashTableCollisionSystem : MonoBehaviour, ICollisionSystem {
 
     public float bucketSize;
     public int fieldSize;
@@ -19,7 +19,7 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
 
     private void Awake()
     {
-        base.Awake();
+
     }
     void Start ()
     {

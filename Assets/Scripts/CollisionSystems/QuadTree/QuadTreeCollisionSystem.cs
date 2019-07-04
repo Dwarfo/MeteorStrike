@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, ICollisionSystem {
+public class QuadTreeCollisionSystem : MonoBehaviour, ICollisionSystem {
 
     public int depth = 2;
     public float size = 5;
@@ -17,7 +17,7 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
 
     private void Awake()
     {
-        base.Awake();
+
     }
     private void Start()
     {
