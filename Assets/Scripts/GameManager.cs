@@ -22,6 +22,7 @@ public class GameManager : Singleton_MB<GameManager> {
     private ICollisionSystem CS;
     private List<AsyncOperation> loadOperations;
     private DebugGatherer debugGatherer = new DebugGatherer();
+    private LineRenderer line;
 
     public GameObjectEvent OnPlayerReady;
     public AABBEvent OnOutOfBounds;
@@ -38,6 +39,11 @@ public class GameManager : Singleton_MB<GameManager> {
         CS = ChooseCollision();
 
         GenerateField();
+        line = this.gameObject.AddComponent<LineRenderer>();
+         // Set the width of the Line Renderer
+         line.SetWidth(0.05F, 0.05F);
+         // Set the number of vertex fo the Line Renderer
+         line.SetVertexCount(2);
     }
 	
 	void Update ()
@@ -60,6 +66,7 @@ public class GameManager : Singleton_MB<GameManager> {
         debugGatherer.numberOfObjects = CS.NumOfObjects;
 
         Debug.Log(debugGatherer.WholeDebugInfo());
+        ColSystemChanged();
     }
 
     public ICollisionSystem ColSys { get{ return CS; } }
@@ -183,6 +190,22 @@ public class GameManager : Singleton_MB<GameManager> {
     {
         return debugGatherer.WholeDebugInfo();
     }
+    public void CheckNearestNeighbour(GameObject go)
+    {   
+        GameObject neighbour = CS.GetNearestNeighbour(go).Key.gameObject;
+        line.SetPosition(0, go.transform.position);
+        line.SetPosition(1, neighbour.transform.position);
+    }
+
+    private void ColSystemChanged()
+    {
+        if(CS.ColSysName != ChooseCollision().ColSysName)
+        {
+            //CS.getGameObject.active = false;
+            CS = ChooseCollision();
+        }
+    }
+
 }
 
 

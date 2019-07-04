@@ -54,7 +54,8 @@ public class QuadTreeNode : INode {
 
         if (subNodes == null && depth > 0)
         {
-            QuadTreeCollisionSystem.Instance.AddObjects(4);
+            var qd = (QuadTreeCollisionSystem)GameManager.Instance.ColSys;
+            qd.AddObjects(4);
             subNodes = new QuadTreeNode[4];
 
             for (int i = 0; i < subNodes.Length; i++)

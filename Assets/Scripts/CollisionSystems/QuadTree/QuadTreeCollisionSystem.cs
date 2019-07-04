@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, ICollisionSystem {
+public class QuadTreeCollisionSystem : MonoBehaviour, ICollisionSystem {
 
     public int depth = 2;
     public float size = 5;
@@ -17,7 +17,7 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
 
     private void Awake()
     {
-        base.Awake();
+
     }
     private void Start()
     {
@@ -55,7 +55,7 @@ public class QuadTreeCollisionSystem : Singleton_MB<QuadTreeCollisionSystem>, IC
     public int CollisionChecks { get {return collisionChecks; } }
     public int NumOfObjects { get {return numOfObjects; } }
     public string ColSysName { get {return "Quad_tree"; } }
-
+    public GameObject getGameObject { get { return gameObject; } }
     public INode GetRoot()
     {
         return qtree.GetRoot();

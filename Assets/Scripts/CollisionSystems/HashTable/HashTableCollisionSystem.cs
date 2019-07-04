@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, ICollisionSystem {
+public class HashTableCollisionSystem : MonoBehaviour, ICollisionSystem {
 
     public float bucketSize;
     public int fieldSize;
@@ -19,7 +19,7 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
 
     private void Awake()
     {
-        base.Awake();
+
     }
     void Start ()
     {
@@ -42,7 +42,7 @@ public class HashTableCollisionSystem : Singleton_MB<HashTableCollisionSystem>, 
     public int CollisionChecks { get {return collisionChecks; } }
     public int NumOfObjects { get {return checkedBuckets; } }
     public string ColSysName { get {return "Hash_table"; } }
-    //Root is irrelevant and nonexistant in hash table
+    public GameObject getGameObject { get { return gameObject; } }
     public INode GetRoot()
     {
         return buckets[0];

@@ -10,6 +10,8 @@ public class RTreeCollsionSystem : MonoBehaviour, ICollisionSystem
 
     public string ColSysName => throw new System.NotImplementedException();
 
+    public GameObject getGameObject => throw new System.NotImplementedException();
+
     public void Build()
     {
         throw new System.NotImplementedException();

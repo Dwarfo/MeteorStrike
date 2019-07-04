@@ -39,11 +39,12 @@ public class Kd_TreeNode : INode  {
     public Kd_TreeNode Divide(List<AABB> X, List<AABB> Y, int axis, Kd_TreeNode parent = null)
     {
         int middleIndex;
-        Kd_TreeCollisionSystem.Instance.AddObjects(2);
+        var qd = (Kd_TreeCollisionSystem)GameManager.Instance.ColSys;
+        qd.AddObjects(4);
 
         if (axis == 0)
         {
-            if (X.Count <= Kd_TreeCollisionSystem.Instance.maxObjNum)
+            if (X.Count <= qd.maxObjNum)
             {
                 makeLeaf(X);
                 MakeBounds(X, Y);
@@ -80,7 +81,7 @@ public class Kd_TreeNode : INode  {
         }
         else
         {
-            if (Y.Count <= Kd_TreeCollisionSystem.Instance.maxObjNum)
+            if (Y.Count <= qd.maxObjNum)
             {
                 makeLeaf(Y);
                 MakeBounds(X, Y);
@@ -123,7 +124,8 @@ public class Kd_TreeNode : INode  {
     {
         content = newChildren;
         isLeaf = true;
-        Kd_TreeCollisionSystem.Instance.AddLeaf(this);
+        var qd = (Kd_TreeCollisionSystem)GameManager.Instance.ColSys;
+        qd.AddLeaf(this);
     }
 
     private void MakeBounds(List<AABB> X, List<AABB> Y)

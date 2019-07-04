@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICollisionSystem {
+public class Kd_TreeCollisionSystem : MonoBehaviour, ICollisionSystem {
 
     public float size;
     public int maxObjNum = 4;
@@ -21,7 +21,7 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
     // Use this for initialization
     private void Awake()
     {
-        base.Awake();
+
     }
 
     void Start ()
@@ -41,7 +41,9 @@ public class Kd_TreeCollisionSystem : Singleton_MB<Kd_TreeCollisionSystem>, ICol
     public int CollisionChecks { get {return collisionChecks; } }
     public int NumOfObjects { get {return numOfObjects; } }
     public string ColSysName { get {return "KD_tree"; } }
-    
+
+    public GameObject getGameObject { get { return gameObject; } }
+
     public INode GetRoot()
     {
         return root;

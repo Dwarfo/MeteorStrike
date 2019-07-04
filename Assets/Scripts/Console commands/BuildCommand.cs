@@ -18,7 +18,7 @@ public class BuildCommand : ConsoleCommand
         AddCommandToConsole(Console.Instance);
     }
 
-    public override void RunCommand(string[] args)
+    public override void RunCommand()
     {
         if(GameManager.Instance.ColSys != null)
         {
