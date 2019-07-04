@@ -61,6 +61,14 @@ public static class BoundsInteraction {
         return Mathf.Sqrt(Mathf.Pow((a1.transform.position.x - a2.transform.position.x), 2) + Mathf.Pow((a1.transform.position.y - a2.transform.position.y), 2));
     }
 
+    public static bool CheckOverlap1D(AABB a1, AABB a2, bool axis)
+    {
+        if(axis)
+            return a1.Max.x > a2.Min.x && a1.Min.x < a2.Max.x;
+        else
+            return a1.Max.y > a2.Max.y && a1.Min.y < a2.Max.y;
+    }
+
 }
 
 public delegate void ActOnCollision();
