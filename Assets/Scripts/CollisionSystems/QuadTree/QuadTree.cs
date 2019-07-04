@@ -22,13 +22,15 @@ public class QuadTree  {
 
     public QuadTreeNode Insert(AABB aabb, Vector2 position)
     {
-        QuadTreeCollisionSystem.Instance.AddObjects(4);
+        var qd = (QuadTreeCollisionSystem)GameManager.Instance.ColSys;
+        qd.AddObjects(4);
         return root.SubdivideNode(position, aabb, depth);
     }
 
     public QuadTreeNode Insert(AABB aabb)
     {
-        QuadTreeCollisionSystem.Instance.AddObjects(4);
+        var qd = (QuadTreeCollisionSystem)GameManager.Instance.ColSys;
+        qd.AddObjects(4);
         return root.SubdivideNode(aabb.transform.position, aabb, depth);
     }
 

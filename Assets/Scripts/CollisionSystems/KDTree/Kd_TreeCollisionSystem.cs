@@ -41,7 +41,9 @@ public class Kd_TreeCollisionSystem : MonoBehaviour, ICollisionSystem {
     public int CollisionChecks { get {return collisionChecks; } }
     public int NumOfObjects { get {return numOfObjects; } }
     public string ColSysName { get {return "KD_tree"; } }
-    
+
+    public GameObject getGameObject { get { return gameObject; } }
+
     public INode GetRoot()
     {
         return root;

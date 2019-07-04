@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton_MB<GameManager> {
 
+    public CollisionSystems collision = CollisionSystems.HashTable;
     public int meteorsNum;
     public GameObject Meteor;
     public GameObject Player;
@@ -196,7 +197,7 @@ public class GameManager : Singleton_MB<GameManager> {
     {
         if(CS.ColSysName != ChooseCollision().ColSysName)
         {
-            CS.getGameObject.enabled = false;
+            //CS.getGameObject.active = false;
             CS = ChooseCollision();
         }
     }

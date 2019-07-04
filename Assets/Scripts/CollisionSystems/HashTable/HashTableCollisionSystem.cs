@@ -42,7 +42,7 @@ public class HashTableCollisionSystem : MonoBehaviour, ICollisionSystem {
     public int CollisionChecks { get {return collisionChecks; } }
     public int NumOfObjects { get {return checkedBuckets; } }
     public string ColSysName { get {return "Hash_table"; } }
-    //Root is irrelevant and nonexistant in hash table
+    public GameObject getGameObject { get { return gameObject; } }
     public INode GetRoot()
     {
         return buckets[0];
