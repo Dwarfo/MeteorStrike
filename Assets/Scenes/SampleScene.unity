@@ -230,6 +230,7 @@ GameObject:
   - component: {fileID: 1715653978}
   - component: {fileID: 1715653977}
   - component: {fileID: 1715653979}
+  - component: {fileID: 1715653981}
   - component: {fileID: 1715653980}
   m_Layer: 0
   m_Name: GameManager
@@ -250,12 +251,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aa93f0faf5c74a48b1a7d92909c4c72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collision: 2
+  collision: 3
   meteorsNum: 10
   Meteor: {fileID: 3435628165809738514, guid: 79af67867467b8c44b3f7027ab97f69b, type: 3}
   Player: {fileID: 2442672912009337056, guid: 6fb2e5ff40556a841b2a1a20b5d48420, type: 3}
   WriteStats: 1
-  StaticSystem: 1
+  StaticSystem: 0
   timeToSimulate: 3
   tileSize: 0
   isDebuging: 0
@@ -337,6 +338,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f60dd2243f547948a1612f692c9fe13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1715653981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715653974}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45766d053de1e2540bbceed20f5f6560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: 0
+  maxObjNum: 4
 --- !u!1001 &2116630090
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//testit
 public static class BoundsInteraction {
 
     public static bool Contains(IForm first, IForm second)
@@ -64,9 +65,9 @@ public static class BoundsInteraction {
     public static bool CheckOverlap1D(AABB a1, AABB a2, bool axis)
     {
         if(axis)
-            return a1.Max.x > a2.Min.x && a1.Min.x < a2.Max.x;
+            return a1.max.x > a2.min.x && a1.min.x < a2.max.x;
         else
-            return a1.Max.y > a2.Max.y && a1.Min.y < a2.Max.y;
+            return a1.max.y > a2.max.y && a1.min.y < a2.max.y;
     }
 
 }

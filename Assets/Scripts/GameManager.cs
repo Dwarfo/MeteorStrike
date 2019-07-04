@@ -170,10 +170,10 @@ public class GameManager : Singleton_MB<GameManager> {
                 col = gameObject.GetComponent<Kd_TreeCollisionSystem>();
                 col.enabled = true;
                 return (ICollisionSystem)col;
-            case CollisionSystems.Rtree:
-                /*col = gameObject.GetComponent<Kd_TreeCollisionSystem>();      //TODO Assign Rtree collision system
+            case CollisionSystems.SweepAndPrune:
+                col = gameObject.GetComponent<SaPCollisionSystem>();      //TODO Assign Rtree collision system
                 col.enabled = true;
-                return (ICollisionSystem)col;*/
+                return (ICollisionSystem)col;
             default:
                 col = gameObject.GetComponent<HashTableCollisionSystem>();
                 col.enabled = true;
@@ -213,7 +213,7 @@ public enum CollisionSystems
     HashTable,
     QuadTree,
     KdTree,
-    Rtree
+    SweepAndPrune
 }
 
 [System.Serializable]

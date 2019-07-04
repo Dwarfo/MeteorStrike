@@ -39,7 +39,9 @@ public class SaPCollisionSystem : MonoBehaviour, ICollisionSystem {
     public int CollisionChecks { get {return collisionChecks; } }
     public int NumOfObjects { get {return numOfObjects; } }
     public string ColSysName { get {return "Sweep_and_prune"; } }
-    
+
+    public GameObject getGameObject => throw new System.NotImplementedException();
+
     public INode GetRoot()
     {
         return root;
@@ -83,7 +85,7 @@ public class SaPCollisionSystem : MonoBehaviour, ICollisionSystem {
                 if(BoundsInteraction.CheckOverlap1D(aabb, active, true))
                 {
                     newCurrentlyChecking.Add(active);
-                    pairs.Add(new Pair(aabb, active));
+                    pairs.Add(new Pair<AABB, AABB>(aabb, active));
                 }
             }
             currentlyChecking = new List<AABB>(newCurrentlyChecking);
@@ -103,8 +105,8 @@ public class SaPCollisionSystem : MonoBehaviour, ICollisionSystem {
 
     public KeyValuePair<AABB, float> GetNearestNeighbour(GameObject obj)
     {
-        if(!objects.Contains(obj))
-            objects.Add(obj);
+        if(!objects.Contains(obj.GetComponent<AABB>()))
+            objects.Add(obj.GetComponent<AABB>());
         Build();
         AABB objectBound = obj.GetComponent<AABB>();
         AABB nearestNeighbour = objectBound;
