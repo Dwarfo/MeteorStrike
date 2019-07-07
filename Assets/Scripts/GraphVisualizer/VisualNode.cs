@@ -5,9 +5,9 @@ using UnityEngine;
 //TODO Change INode to actual visualizable nodes
 public class VisualNode : MonoBehaviour
 {
+
     GameObject tableWithNodeInfo;
     
-
     void OnMouseOver()
     {
         tableWithNodeInfo.SetActive(true);
@@ -16,5 +16,10 @@ public class VisualNode : MonoBehaviour
     void OnMouseExit()
     {
         tableWithNodeInfo.SetActive(false);
+    }
+
+    public void Initialize(INode node, INode parentNode)
+    {
+        
     }
 }

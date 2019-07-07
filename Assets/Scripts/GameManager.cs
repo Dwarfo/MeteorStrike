@@ -23,6 +23,8 @@ public class GameManager : Singleton_MB<GameManager> {
     private List<AsyncOperation> loadOperations;
     private DebugGatherer debugGatherer = new DebugGatherer();
     private LineRenderer line;
+    private Vector3[] positions = new Vector3[2];
+    private GameObject PlayerInstance;
 
     public GameObjectEvent OnPlayerReady;
     public AABBEvent OnOutOfBounds;
@@ -33,6 +35,7 @@ public class GameManager : Singleton_MB<GameManager> {
 
     void Start ()
     {
+        OnPlayerReady.AddListener(HandleOnPlayerReady);
         loadOperations = new List<AsyncOperation>();
         Random.InitState(1);
         tileSize = 3 * Meteor.GetComponent<SpriteRenderer>().sprite.bounds.max.x;
@@ -43,7 +46,7 @@ public class GameManager : Singleton_MB<GameManager> {
          // Set the width of the Line Renderer
          line.SetWidth(0.05F, 0.05F);
          // Set the number of vertex fo the Line Renderer
-         line.SetVertexCount(2);
+         line.positionCount = 2;
     }
 	
 	void Update ()
@@ -57,15 +60,25 @@ public class GameManager : Singleton_MB<GameManager> {
 
         debugGatherer.InitDebug();
 
-        //CS.Build();
+        CS.Build();
         //CS.CheckCollisions();
+        GameObject go = CS.GetNearestNeighbour(PlayerInstance).Key.gameObject;
+        if (go == null)
+        {
+            Debug.Log("NULL!");
+            go = PlayerInstance;
+        }
 
         debugGatherer.time = execTime;
         debugGatherer.deltaTime = Time.deltaTime;
         debugGatherer.n2calculations = CS.CollisionChecks;
         debugGatherer.numberOfObjects = CS.NumOfObjects;
 
-        Debug.Log(debugGatherer.WholeDebugInfo());
+        positions[0] = PlayerInstance.transform.position;
+        positions[1] = go.transform.position;
+        line.SetPositions(positions);
+
+        //Debug.Log(debugGatherer.WholeDebugInfo());
         ColSystemChanged();
     }
 
@@ -91,7 +104,7 @@ public class GameManager : Singleton_MB<GameManager> {
                 staticObjects.Add(go);
              }
         }
-        
+
         OnPlayerReady.Invoke(Instantiate(Player));
         //CS.InsertToStatic(staticObjects);
     }
@@ -204,6 +217,11 @@ public class GameManager : Singleton_MB<GameManager> {
             CS = null;
             CS = ChooseCollision();
         }
+    }
+
+    private void HandleOnPlayerReady(GameObject player)
+    {
+        PlayerInstance = player;
     }
 }
 
