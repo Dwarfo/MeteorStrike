@@ -8,8 +8,11 @@ public class GraphVisualizer : MonoBehaviour
     GameObject elNode;
     List<VisualNode> graphNodes = new List<VisualNode>();
     List<INode> nodes = new List<INode>();
+    Dictionary<INode, VisualNode> nodeToVisual = new Dictionary<INode, VisualNode>();
+    List<List<VisualNode>> nodesInDepth = new List<List<VisualNode>>();
     INode root;
     float scale = 1;
+    int maxDepth;
 
     public void DrawGraph()
     {
@@ -34,28 +37,38 @@ public class GraphVisualizer : MonoBehaviour
         toCheck.Add(root);
 
         VisualNode rootV = Instantiate(elNode).GetComponent<VisualNode>();
-        rootV.Initialize(root, null);
-        graphNodes.Add(rootV);
+        rootV.Initialize(root, null, 0);
+        nodeToVisual.Add(root, rootV);
+
+        nodesInDepth.Add(new List<VisualNode>());
+        nodesInDepth[0].Add(rootV);
+        int depth = 1;
 
         while (toCheck.Count != 0)
         {
+            nodesInDepth.Add(new List<VisualNode>());
             foreach (INode node in toCheck)
             {
                 if (node.Children != null)
                 {
+                    VisualNode parentVisual = nodeToVisual[node];
                     foreach (INode childNode in node.Children)
                     {
                         newToCheck.Add(childNode);
                         VisualNode vn = Instantiate(elNode).GetComponent<VisualNode>();
-                        vn.Initialize(childNode, node);
-                        graphNodes.Add(vn);
+                        vn.Initialize(childNode, parentVisual, depth);
+                        vn.transform.parent = gameObject.transform;
+                        nodeToVisual.Add(childNode, vn);
+                        nodesInDepth[depth].Add(vn);
                     }
                 }
             }
             toCheck = new List<INode>(newToCheck);
             newToCheck = new List<INode>();
+            depth++;
         }
 
+        maxDepth = depth;
         Reposition();
 
     }
@@ -68,6 +81,9 @@ public class GraphVisualizer : MonoBehaviour
     //Reposition a graphical nodes to be visible in a sensible way
     private void Reposition()
     {
+        //Two steps:
+        //First bottom-up for placing graph elements 
 
+        //Second top-down for drawing connections
     }
 }
