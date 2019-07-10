@@ -71,33 +71,34 @@ public class GraphVisualizer : MonoBehaviour
         }
 
         maxDepth = depth;
-
     }
 
-    private void AddNode(INode node)
-    {
-        nodes.Add(node);
-    }
-
-    //Reposition a graphical nodes to be visible in a sensible way
-    private void Reposition(List<VisualNode> nodes, VisualNode parent)
+    //Reposition a graphical nodes to be visible as a hierarchy
+    private void Reposition()
     {
         int depth = nodesInDepth.Count - 1;
 
         int numOfNodes = nodesInDepth[depth].Count;
-        int totalWidth = CountWidth(nodesInDepth[depth]);
+        //int totalWidth = CountWidth(nodesInDepth[depth]); //TODO make graph centered
         int currentWidth = 0;
 
-        nodesInDepth[depth][0].SetPosition(0);
-        currentWidth += nodesInDepth[depth][0].width;
-
-        for (int i = 1; i < nodesInDepth[depth].Count; i++)
+        while (depth >= 0)
         {
-            VisualNode currentNode = nodesInDepth[depth][i];
-            currentNode.SetPosition(currentWidth + currentNode.width / 2);
-            currentWidth += currentNode.width;
+            currentWidth = 0;
 
+            for (int i = 0; i < nodesInDepth[depth].Count; i++)
+            {
+                VisualNode currentNode = nodesInDepth[depth][i];
+                currentNode.SetPosition(currentWidth + currentNode.width / 2);
+                currentWidth += currentNode.width;
+            }
+
+            depth--;
         }
+    }
+
+    private void DrawConnections()
+    {
 
     }
 

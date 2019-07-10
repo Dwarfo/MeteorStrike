@@ -35,6 +35,8 @@ public class VisualNode : MonoBehaviour
     public void AddChild(VisualNode vn)
     {
         childrenVisual.Add(vn);
+        if (childrenVisual.Count > 1)
+            width += vn.width;
     }
 
     private void Reparent(VisualNode parentNode)
