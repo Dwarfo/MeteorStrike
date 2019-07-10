@@ -5,7 +5,9 @@ using UnityEngine;
 //TODO Change INode to actual visualizable nodes
 public class GraphVisualizer : MonoBehaviour
 {
-    GameObject elNode;
+    public GameObject elNode;
+    public static float nodeRadius = 9;
+    public static float levelHeight = 36;
     List<VisualNode> graphNodes = new List<VisualNode>();
     List<INode> nodes = new List<INode>();
     Dictionary<INode, VisualNode> nodeToVisual = new Dictionary<INode, VisualNode>();
@@ -33,19 +35,20 @@ public class GraphVisualizer : MonoBehaviour
     {
         List<INode> toCheck = new List<INode>();
         List<INode> newToCheck = new List<INode>();
-
+        int depth = 0;
         toCheck.Add(root);
 
         VisualNode rootV = Instantiate(elNode).GetComponent<VisualNode>();
-        rootV.Initialize(root, null, 0);
+
+        rootV.Initialize(root, null, depth);
         nodeToVisual.Add(root, rootV);
 
         nodesInDepth.Add(new List<VisualNode>());
         nodesInDepth[0].Add(rootV);
-        int depth = 1;
 
         while (toCheck.Count != 0)
         {
+            depth++;
             nodesInDepth.Add(new List<VisualNode>());
             foreach (INode node in toCheck)
             {
@@ -65,11 +68,9 @@ public class GraphVisualizer : MonoBehaviour
             }
             toCheck = new List<INode>(newToCheck);
             newToCheck = new List<INode>();
-            depth++;
         }
 
         maxDepth = depth;
-        Reposition();
 
     }
 
@@ -79,11 +80,36 @@ public class GraphVisualizer : MonoBehaviour
     }
 
     //Reposition a graphical nodes to be visible in a sensible way
-    private void Reposition()
+    private void Reposition(List<VisualNode> nodes, VisualNode parent)
     {
-        //Two steps:
-        //First bottom-up for placing graph elements 
+        int depth = nodesInDepth.Count - 1;
 
-        //Second top-down for drawing connections
+        int numOfNodes = nodesInDepth[depth].Count;
+        int totalWidth = CountWidth(nodesInDepth[depth]);
+        int currentWidth = 0;
+
+        nodesInDepth[depth][0].SetPosition(0);
+        currentWidth += nodesInDepth[depth][0].width;
+
+        for (int i = 1; i < nodesInDepth[depth].Count; i++)
+        {
+            VisualNode currentNode = nodesInDepth[depth][i];
+            currentNode.SetPosition(currentWidth + currentNode.width / 2);
+            currentWidth += currentNode.width;
+
+        }
+
+    }
+
+    private int CountWidth(List<VisualNode> nodes)
+    {
+        int totalWidth = 0;
+        int numOfNodes = nodes.Count;
+        for (int i = 0; i < numOfNodes; i++)
+        {
+            totalWidth += nodes[i].width;
+        }
+
+        return totalWidth;
     }
 }

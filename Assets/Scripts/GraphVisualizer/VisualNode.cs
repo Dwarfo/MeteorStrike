@@ -6,12 +6,13 @@ using UnityEngine;
 public class VisualNode : MonoBehaviour
 {
 
-    GameObject tableWithNodeInfo;
+    public GameObject tableWithNodeInfo;
+    public int width = 4;
     int depth;
     int numOfChildren;
     string nodeType;
     List<AABB> Content;
-    List<VisualNode> childrenVisual = new List<VisualNode>();
+    public List<VisualNode> childrenVisual = new List<VisualNode>();
          
     void OnMouseOver()
     {
@@ -25,7 +26,7 @@ public class VisualNode : MonoBehaviour
 
     public void Initialize(INode node, VisualNode parentNode, int depth)
     {
-        parentNode.AddChild(this);
+        Reparent(parentNode);
         nodeType = node.NodeType;
         this.depth = depth;
         Content = node.Content;
@@ -34,5 +35,17 @@ public class VisualNode : MonoBehaviour
     public void AddChild(VisualNode vn)
     {
         childrenVisual.Add(vn);
+    }
+
+    private void Reparent(VisualNode parentNode)
+    {
+        parentNode.AddChild(this);
+        transform.parent = parentNode.transform;
+    }
+
+    public void SetPosition(int pos)
+    {
+        RectTransform rt = gameObject.GetComponent<RectTransform>();
+        rt.localPosition = new Vector3(pos * GraphVisualizer.nodeRadius, -1 * depth * GraphVisualizer.levelHeight);
     }
 }

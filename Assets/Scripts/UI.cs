@@ -10,6 +10,7 @@ public class UI : Singleton_MB<UI> {
 
     public Text scoreText;
     public Text collisionCheckNum;
+    public GameObject Graph;
 
     private int score = 0;
 
