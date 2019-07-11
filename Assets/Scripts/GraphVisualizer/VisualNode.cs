@@ -6,8 +6,9 @@ using UnityEngine;
 public class VisualNode : MonoBehaviour
 {
     public GameObject tableWithNodeInfo;
-    public int width = 4;
+    public int width = 2;
     public int depth;
+    public VisualNode parent;
     int numOfChildren;
     public int currentPos;
     public string nodeType;
@@ -35,10 +36,7 @@ public class VisualNode : MonoBehaviour
     public void AddChild(VisualNode vn)
     {
         childrenVisual.Add(vn);
-        if (childrenVisual.Count > 1)
-            width += vn.width;
-        else
-            width = vn.width;
+        vn.SetParent(this);
     }
 
     private void Reparent(VisualNode parentNode)
@@ -53,7 +51,7 @@ public class VisualNode : MonoBehaviour
     public void SetPosition(int pos)
     {
         RectTransform rt = gameObject.GetComponent<RectTransform>();
-        rt.localPosition = new Vector3(pos * GraphVisualizer.nodeRadius, -1 * depth * GraphVisualizer.levelHeight);
+        rt.localPosition = new Vector3(pos * GraphVisualizer.nodeRadius, -1 * GraphVisualizer.levelHeight);
         currentPos = pos;
         GetComponent<InfoPanel>().UpdateInfo(this);
     }
@@ -62,5 +60,24 @@ public class VisualNode : MonoBehaviour
     {
         RectTransform rt = gameObject.GetComponent<RectTransform>();
         rt.localPosition = new Vector3((currentPos - posDiff) * GraphVisualizer.nodeRadius, -1 * depth * GraphVisualizer.levelHeight);
+    }
+
+    public void CountWidth()
+    {
+        if (childrenVisual.Count == 0)
+            return;
+
+        width = childrenVisual[0].width;
+
+        for (int i = 1; i < childrenVisual.Count; i++)
+        {
+            width += childrenVisual[i].width;
+        }
+
+    }
+
+    public void SetParent(VisualNode batya)
+    {
+        parent = batya;
     }
 }

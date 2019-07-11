@@ -10,5 +10,7 @@ public class InfoPanel : MonoBehaviour
     {
         nodeInfo.text = "Depth is: " + infonode.depth + "\nWidth is " + infonode.width + 
             "\nCurrent position is " + infonode.currentPos + "\nNodetype is " + infonode.nodeType;
+        if (infonode.parent != null)
+            nodeInfo.text += "\nParent is: " + infonode.parent.gameObject.name;
     }
 }

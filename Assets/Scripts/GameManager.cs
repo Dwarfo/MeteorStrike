@@ -64,21 +64,7 @@ public class GameManager : Singleton_MB<GameManager> {
 
         CS.Build();
         CS.CheckCollisions();
-        GameObject go = CS.GetNearestNeighbour(PlayerInstance).Key.gameObject;
-        if (go == null)
-        {
-            Debug.Log("NULL!");
-            go = PlayerInstance;
-        }
-
-        debugGatherer.time = execTime;
-        debugGatherer.deltaTime = Time.deltaTime;
-        debugGatherer.n2calculations = CS.CollisionChecks;
-        debugGatherer.numberOfObjects = CS.NumOfObjects;
-
-        positions[0] = PlayerInstance.transform.position;
-        positions[1] = go.transform.position;
-        line.SetPositions(positions);
+        //CheckNearestNeighbour(PlayerInstance);
 
         //Debug.Log(debugGatherer.WholeDebugInfo());
         ColSystemChanged();
@@ -210,11 +196,23 @@ public class GameManager : Singleton_MB<GameManager> {
     {
         return debugGatherer.WholeDebugInfo();
     }
-    public void CheckNearestNeighbour(GameObject go)
-    {   
-        GameObject neighbour = CS.GetNearestNeighbour(go).Key.gameObject;
-        line.SetPosition(0, go.transform.position);
-        line.SetPosition(1, neighbour.transform.position);
+    public void CheckNearestNeighbour(GameObject toCheck)
+    {
+        GameObject go = CS.GetNearestNeighbour(toCheck).Key.gameObject;
+        if (go == null)
+        {
+            Debug.Log("NULL!");
+            go = toCheck;
+        }
+
+        debugGatherer.time = execTime;
+        debugGatherer.deltaTime = Time.deltaTime;
+        debugGatherer.n2calculations = CS.CollisionChecks;
+        debugGatherer.numberOfObjects = CS.NumOfObjects;
+
+        positions[0] = PlayerInstance.transform.position;
+        positions[1] = go.transform.position;
+        line.SetPositions(positions);
     }
 
     private void ColSystemChanged()

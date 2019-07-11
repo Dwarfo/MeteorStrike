@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 640034223}
   - component: {fileID: 640034222}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: GraphVisualizer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -6,8 +6,8 @@ using UnityEngine;
 public class GraphVisualizer : Singleton_MB<GraphVisualizer>
 {
     public GameObject elNode;
-    public static float nodeRadius = 25;
-    public static float levelHeight = 100;
+    public static float nodeRadius = 5;
+    public static float levelHeight = 40;
 
     List<VisualNode> graphNodes = new List<VisualNode>();
     List<INode> nodes = new List<INode>();
@@ -99,12 +99,25 @@ public class GraphVisualizer : Singleton_MB<GraphVisualizer>
             for (int i = 0; i < nodesInDepth[depth].Count; i++)
             {
                 VisualNode currentNode = nodesInDepth[depth][i];
-                currentNode.SetPosition(currentWidth + currentNode.width / 2);
-                currentWidth += currentNode.width;
+                currentNode.CountWidth();
+                //currentNode.SetPosition(currentWidth + currentNode.width / 2);
+                //currentWidth += currentNode.width;
             }
-
             depth--;
         }
+
+        foreach (VisualNode node in nodeToVisual.Values)
+        {
+            currentWidth = 0;
+            foreach (VisualNode childe in node.childrenVisual)
+            {
+                childe.transform.parent = node.transform;
+                childe.SetPosition(currentWidth + childe.width / 2 - node.width / 2);
+                currentWidth += childe.width;
+            }
+        }
+
+
     }
 
     private void DrawConnections()
@@ -141,15 +154,11 @@ public class GraphVisualizer : Singleton_MB<GraphVisualizer>
         }
     }
 
-    private int CountWidth(List<VisualNode> nodes)
-    {
-        int totalWidth = 0;
-        int numOfNodes = nodes.Count;
-        for (int i = 0; i < numOfNodes; i++)
-        {
-            totalWidth += nodes[i].width;
-        }
+}
 
-        return totalWidth;
-    }
+public enum DrawType
+{
+    Symmetrical,
+    Compact,
+    CompactSymmetrical
 }
