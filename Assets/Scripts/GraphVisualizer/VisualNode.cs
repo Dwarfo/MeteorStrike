@@ -44,7 +44,7 @@ public class VisualNode : MonoBehaviour
         if (parentNode != null)
         {
             parentNode.AddChild(this);
-            transform.parent = GraphVisualizer.Instance.transform;
+            transform.SetParent(GraphVisualizer.Instance.transform, false);
         }
     }
 
@@ -52,6 +52,14 @@ public class VisualNode : MonoBehaviour
     {
         RectTransform rt = gameObject.GetComponent<RectTransform>();
         rt.localPosition = new Vector3(pos * GraphVisualizer.nodeRadius, -1 * GraphVisualizer.levelHeight);
+        currentPos = pos;
+        GetComponent<InfoPanel>().UpdateInfo(this);
+    }
+
+    public void SetPosition(int pos, int depth)
+    {
+        RectTransform rt = gameObject.GetComponent<RectTransform>();
+        rt.localPosition = new Vector3(pos * GraphVisualizer.nodeRadius, -1 * GraphVisualizer.levelHeight * depth);
         currentPos = pos;
         GetComponent<InfoPanel>().UpdateInfo(this);
     }

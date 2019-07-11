@@ -49,7 +49,7 @@ public class GraphVisualizer : Singleton_MB<GraphVisualizer>
         VisualNode rootV = Instantiate(elNode).GetComponent<VisualNode>();
 
         rootV.Initialize(root, null, depth);
-        rootV.transform.parent = transform;
+        rootV.transform.SetParent(transform, false);
 
         nodeToVisual.Add(root, rootV);
 
@@ -87,36 +87,29 @@ public class GraphVisualizer : Singleton_MB<GraphVisualizer>
     private void Reposition()
     {
         int depth = nodesInDepth.Count - 1;
-
-        int numOfNodes = nodesInDepth[depth].Count;
-        //int totalWidth = CountWidth(nodesInDepth[depth]); //TODO make graph centered
-        int currentWidth = 0;
-
+        int divider = 1;
+        
         while (depth >= 0)
         {
-            currentWidth = 0;
 
             for (int i = 0; i < nodesInDepth[depth].Count; i++)
             {
                 VisualNode currentNode = nodesInDepth[depth][i];
                 currentNode.CountWidth();
-                //currentNode.SetPosition(currentWidth + currentNode.width / 2);
-                //currentWidth += currentNode.width;
             }
             depth--;
         }
-
+        
         foreach (VisualNode node in nodeToVisual.Values)
         {
-            currentWidth = 0;
+            int currentWidth = 0;
             foreach (VisualNode childe in node.childrenVisual)
             {
-                childe.transform.parent = node.transform;
+                childe.transform.SetParent(node.transform, false);
                 childe.SetPosition(currentWidth + childe.width / 2 - node.width / 2);
-                currentWidth += childe.width;
+                currentWidth += childe.width / divider;
             }
         }
-
 
     }
 
@@ -137,6 +130,7 @@ public class GraphVisualizer : Singleton_MB<GraphVisualizer>
                     GameObject line = new GameObject();
                     lines.Add(line);
                     var lr = line.AddComponent<LineRenderer>();
+                    //lr.material = new Material(Shader.Find("Mobile/Particles/Additive"));
                     lr.startWidth = 5F;
                     lr.endWidth = 5F;
                     lr.positionCount = 2;
@@ -147,6 +141,7 @@ public class GraphVisualizer : Singleton_MB<GraphVisualizer>
                     lr.endColor = Color.green;
                     lr.SetPositions(positions);
                     newToDraw.Add(childNode);
+                    line.transform.SetParent(transform, false);
                 }
             }
             toDraw = new List<VisualNode>(newToDraw);
