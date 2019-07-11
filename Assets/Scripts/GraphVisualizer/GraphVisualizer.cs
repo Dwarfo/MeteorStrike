@@ -6,8 +6,8 @@ using UnityEngine;
 public class GraphVisualizer : Singleton_MB<GraphVisualizer>
 {
     public GameObject elNode;
-    public static float nodeRadius = 5;
-    public static float levelHeight = 40;
+    public static float nodeRadius = 25;
+    public static float levelHeight = 100;
 
     List<VisualNode> graphNodes = new List<VisualNode>();
     List<INode> nodes = new List<INode>();
@@ -21,8 +21,8 @@ public class GraphVisualizer : Singleton_MB<GraphVisualizer>
     //TODO make hierarchy object for assigning parents to the "lines" object and "nodes" object on scene
     public void DrawGraph(INode root)
     {
-        nodeRadius = nodeRadius / gameObject.GetComponent<RectTransform>().localScale.x;
-        levelHeight = levelHeight / gameObject.GetComponent<RectTransform>().localScale.y;
+        //nodeRadius = nodeRadius / gameObject.GetComponent<RectTransform>().localScale.x;
+        //levelHeight = levelHeight / gameObject.GetComponent<RectTransform>().localScale.y;
         ExtractGraph(root);
         Reposition();
         DrawConnections();
@@ -130,7 +130,7 @@ public class GraphVisualizer : Singleton_MB<GraphVisualizer>
                     GameObject line = new GameObject();
                     lines.Add(line);
                     var lr = line.AddComponent<LineRenderer>();
-                    //lr.material = new Material(Shader.Find("Mobile/Particles/Additive"));
+                    //lr.material = new Material(Shader.Find("Prefab/GreenForLines"));
                     lr.startWidth = 5F;
                     lr.endWidth = 5F;
                     lr.positionCount = 2;
@@ -140,6 +140,7 @@ public class GraphVisualizer : Singleton_MB<GraphVisualizer>
                     lr.startColor = Color.green;
                     lr.endColor = Color.green;
                     lr.SetPositions(positions);
+                    line.AddComponent<CanvasRenderer>();
                     newToDraw.Add(childNode);
                     line.transform.SetParent(transform, false);
                 }
