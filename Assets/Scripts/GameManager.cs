@@ -32,6 +32,8 @@ public class GameManager : Singleton_MB<GameManager> {
     [SerializeField]
     private float execTime;
     private bool written = true;
+    private bool draw = false;
+
 
     void Start ()
     {
@@ -43,10 +45,10 @@ public class GameManager : Singleton_MB<GameManager> {
 
         GenerateField();
         line = this.gameObject.AddComponent<LineRenderer>();
-         // Set the width of the Line Renderer
-         line.SetWidth(0.05F, 0.05F);
-         // Set the number of vertex fo the Line Renderer
-         line.positionCount = 2;
+        // Set the width of the Line Renderer
+        line.SetWidth(0.05F, 0.05F);
+        // Set the number of vertex fo the Line Renderer
+        line.positionCount = 2;
     }
 	
 	void Update ()
@@ -61,7 +63,7 @@ public class GameManager : Singleton_MB<GameManager> {
         debugGatherer.InitDebug();
 
         CS.Build();
-        //CS.CheckCollisions();
+        CS.CheckCollisions();
         GameObject go = CS.GetNearestNeighbour(PlayerInstance).Key.gameObject;
         if (go == null)
         {
@@ -80,6 +82,11 @@ public class GameManager : Singleton_MB<GameManager> {
 
         //Debug.Log(debugGatherer.WholeDebugInfo());
         ColSystemChanged();
+        if (!draw)
+        {
+            GraphVisualizer.Instance.DrawGraph(CS.GetRoot());
+            draw = true;
+        }
     }
 
     public ICollisionSystem ColSys { get{ return CS; } }
@@ -184,7 +191,7 @@ public class GameManager : Singleton_MB<GameManager> {
                 col.enabled = true;
                 return (ICollisionSystem)col;
             case CollisionSystems.SweepAndPrune:
-                col = gameObject.GetComponent<SaPCollisionSystem>();      //TODO Assign Rtree collision system
+                col = gameObject.GetComponent<SaPCollisionSystem>();      
                 col.enabled = true;
                 return (ICollisionSystem)col;
             default:

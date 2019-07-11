@@ -41,8 +41,11 @@ public class VisualNode : MonoBehaviour
 
     private void Reparent(VisualNode parentNode)
     {
-        parentNode.AddChild(this);
-        transform.parent = parentNode.transform;
+        if (parentNode != null)
+        {
+            parentNode.AddChild(this);
+            transform.parent = GraphVisualizer.Instance.transform;
+        }
     }
 
     public void SetPosition(int pos)

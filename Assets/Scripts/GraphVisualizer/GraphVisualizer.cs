@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //TODO Change INode to actual visualizable nodes
-public class GraphVisualizer : MonoBehaviour
+public class GraphVisualizer : Singleton_MB<GraphVisualizer>
 {
     public GameObject elNode;
-    public static float nodeRadius = 9;
-    public static float levelHeight = 36;
+    public static float nodeRadius = 25;
+    public static float levelHeight = 100;
 
     List<VisualNode> graphNodes = new List<VisualNode>();
     List<INode> nodes = new List<INode>();
@@ -21,6 +21,8 @@ public class GraphVisualizer : MonoBehaviour
     //TODO make hierarchy object for assigning parents to the "lines" object and "nodes" object on scene
     public void DrawGraph(INode root)
     {
+        nodeRadius = nodeRadius / gameObject.GetComponent<RectTransform>().localScale.x;
+        levelHeight = levelHeight / gameObject.GetComponent<RectTransform>().localScale.y;
         ExtractGraph(root);
         Reposition();
         DrawConnections();
@@ -45,9 +47,10 @@ public class GraphVisualizer : MonoBehaviour
         toCheck.Add(root);
 
         VisualNode rootV = Instantiate(elNode).GetComponent<VisualNode>();
-        rootV.transform.parent = transform;
 
         rootV.Initialize(root, null, depth);
+        rootV.transform.parent = transform;
+
         nodeToVisual.Add(root, rootV);
 
         nodesInDepth.Add(new List<VisualNode>());
@@ -67,7 +70,7 @@ public class GraphVisualizer : MonoBehaviour
                         newToCheck.Add(childNode);
                         VisualNode vn = Instantiate(elNode).GetComponent<VisualNode>();
                         vn.Initialize(childNode, parentVisual, depth);
-                        vn.transform.parent = gameObject.transform;
+                        //vn.transform.parent = gameObject.transform;
                         nodeToVisual.Add(childNode, vn);
                         nodesInDepth[depth].Add(vn);
                     }
@@ -121,14 +124,15 @@ public class GraphVisualizer : MonoBehaviour
                     GameObject line = new GameObject();
                     lines.Add(line);
                     var lr = line.AddComponent<LineRenderer>();
-                    lr.startWidth = 0.05F;
-                    lr.endWidth = 0.05F;
+                    lr.startWidth = 5F;
+                    lr.endWidth = 5F;
                     lr.positionCount = 2;
                     Vector3[] positions = new Vector3[2];
                     positions[0] = node.transform.position;
                     positions[1] = childNode.transform.position;
                     lr.SetPositions(positions);
-
+                    lr.startColor = Color.green;
+                    lr.endColor = Color.green;
                     newToDraw.Add(childNode);
                 }
             }
