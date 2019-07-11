@@ -130,9 +130,9 @@ public class GraphVisualizer : Singleton_MB<GraphVisualizer>
                     Vector3[] positions = new Vector3[2];
                     positions[0] = node.transform.position;
                     positions[1] = childNode.transform.position;
-                    lr.SetPositions(positions);
                     lr.startColor = Color.green;
                     lr.endColor = Color.green;
+                    lr.SetPositions(positions);
                     newToDraw.Add(childNode);
                 }
             }

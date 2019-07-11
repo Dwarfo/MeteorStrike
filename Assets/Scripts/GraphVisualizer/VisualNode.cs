@@ -5,12 +5,12 @@ using UnityEngine;
 //TODO Change INode to actual visualizable nodes
 public class VisualNode : MonoBehaviour
 {
-
     public GameObject tableWithNodeInfo;
     public int width = 4;
-    int depth;
+    public int depth;
     int numOfChildren;
-    string nodeType;
+    public int currentPos;
+    public string nodeType;
     List<AABB> Content;
     public List<VisualNode> childrenVisual = new List<VisualNode>();
          
@@ -37,6 +37,8 @@ public class VisualNode : MonoBehaviour
         childrenVisual.Add(vn);
         if (childrenVisual.Count > 1)
             width += vn.width;
+        else
+            width = vn.width;
     }
 
     private void Reparent(VisualNode parentNode)
@@ -52,5 +54,13 @@ public class VisualNode : MonoBehaviour
     {
         RectTransform rt = gameObject.GetComponent<RectTransform>();
         rt.localPosition = new Vector3(pos * GraphVisualizer.nodeRadius, -1 * depth * GraphVisualizer.levelHeight);
+        currentPos = pos;
+        GetComponent<InfoPanel>().UpdateInfo(this);
+    }
+
+    public void RepositionOnParent(int posDiff)
+    {
+        RectTransform rt = gameObject.GetComponent<RectTransform>();
+        rt.localPosition = new Vector3((currentPos - posDiff) * GraphVisualizer.nodeRadius, -1 * depth * GraphVisualizer.levelHeight);
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5487069335763227991}
   - component: {fileID: 5487069335763227989}
   - component: {fileID: 5487069335763227990}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Info
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 5487069335913591662}
   - component: {fileID: 5487069335913591660}
   - component: {fileID: 5487069335913591661}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: InfoText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -166,7 +166,8 @@ GameObject:
   - component: {fileID: 5487069336321663687}
   - component: {fileID: 5487069336321663680}
   - component: {fileID: 5487069336321663686}
-  m_Layer: 5
+  - component: {fileID: 2070270603}
+  m_Layer: 9
   m_Name: GraphNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +181,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5487069336321663682}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -244,4 +245,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tableWithNodeInfo: {fileID: 5487069335763227984}
   width: 4
+  depth: 0
+  currentPos: 0
+  nodeType: 
   childrenVisual: []
+--- !u!114 &2070270603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5487069336321663682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0415f126f0abdd46a693fff46b6c827, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nodeInfo: {fileID: 5487069335913591661}
