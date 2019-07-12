@@ -82,11 +82,4 @@ public class PlayerController : MonoBehaviour {
             currentTime = 0;
         }
     }
-
-
-
-
 }
-
-[System.Serializable]
-public class EmptyEvent : UnityEvent { }

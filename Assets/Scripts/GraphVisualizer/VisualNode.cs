@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 //TODO Change INode to actual visualizable nodes
-public class VisualNode : MonoBehaviour
+public class VisualNode : MonoBehaviour, IPointerClickHandler
 {
     public GameObject tableWithNodeInfo;
+    public Text nodeName;
     public int width = 2;
     public int depth;
     public VisualNode parent;
@@ -15,15 +18,6 @@ public class VisualNode : MonoBehaviour
     List<AABB> Content;
     public List<VisualNode> childrenVisual = new List<VisualNode>();
          
-    void OnMouseOver()
-    {
-        tableWithNodeInfo.SetActive(true);
-    }
-
-    void OnMouseExit()
-    {
-        tableWithNodeInfo.SetActive(false);
-    }
 
     public void Initialize(INode node, VisualNode parentNode, int depth)
     {
@@ -31,6 +25,8 @@ public class VisualNode : MonoBehaviour
         nodeType = node.NodeType;
         this.depth = depth;
         Content = node.Content;
+        GraphVisualizer.Instance.OnSizeChanged.AddListener(HandleResize);
+        HandleResize();
     }
 
     public void AddChild(VisualNode vn)
@@ -87,5 +83,16 @@ public class VisualNode : MonoBehaviour
     public void SetParent(VisualNode batya)
     {
         parent = batya;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        tableWithNodeInfo.SetActive(!tableWithNodeInfo.activeInHierarchy);
+    }
+
+    private void HandleResize()
+    {
+        tableWithNodeInfo.transform.localScale = new Vector3(1 / GraphVisualizer.Instance.transform.localScale.x, 
+                1 / GraphVisualizer.Instance.transform.localScale.y);
     }
 }

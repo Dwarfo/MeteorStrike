@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class SaPCollisionSystem : MonoBehaviour, ICollisionSystem {
 
-    public float size;
-    public int maxObjNum = 4;
     //K - index of an axis, 1 is max
     private int count = 0;
     private List<AABB> objects = new List<AABB>();

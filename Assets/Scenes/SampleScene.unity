@@ -230,6 +230,8 @@ GameObject:
   - component: {fileID: 640034224}
   - component: {fileID: 640034223}
   - component: {fileID: 640034222}
+  - component: {fileID: 640034227}
+  - component: {fileID: 640034226}
   m_Layer: 5
   m_Name: GraphVisualizer
   m_TagString: Untagged
@@ -246,15 +248,16 @@ RectTransform:
   m_GameObject: {fileID: 640034220}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
-  m_Children: []
+  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
+  m_Children:
+  - {fileID: 1183621724}
   m_Father: {fileID: 2116630091}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: 91}
-  m_SizeDelta: {x: 3236, y: 1818}
+  m_AnchoredPosition: {x: 25.65, y: 63.65}
+  m_SizeDelta: {x: -653.58, y: -273.48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &640034222
 MonoBehaviour:
@@ -269,6 +272,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   elNode: {fileID: 5487069336321663682, guid: e4256c9f16792d043b619d761dde7ea4, type: 3}
+  line: {fileID: 2578620683260634210, guid: 36423eafae592b7439f7684927e3bf5f, type: 3}
+  scale: 0.05
+  type: 1
+  OnSizeChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: EmptyEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &640034223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +339,43 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &640034226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640034220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+--- !u!222 &640034227
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640034220}
+  m_CullTransparentMesh: 0
 --- !u!1 &1160034453
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,6 +406,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1183621723
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1183621724}
+  m_Layer: 5
+  m_Name: Lines
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1183621724
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183621723}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 640034221}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1715653974
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,7 +475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aa93f0faf5c74a48b1a7d92909c4c72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collision: 2
+  collision: 1
   meteorsNum: 10
   Meteor: {fileID: 3435628165809738514, guid: 79af67867467b8c44b3f7027ab97f69b, type: 3}
   Player: {fileID: 2442672912009337056, guid: 6fb2e5ff40556a841b2a1a20b5d48420, type: 3}
@@ -492,8 +574,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45766d053de1e2540bbceed20f5f6560, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 0
-  maxObjNum: 4
 --- !u!1001 &2116630090
 PrefabInstance:
   m_ObjectHideFlags: 0

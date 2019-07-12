@@ -35,7 +35,7 @@ public class GameManager : Singleton_MB<GameManager> {
     private bool draw = false;
 
 
-    void Start ()
+    void Start()
     {
         OnPlayerReady.AddListener(HandleOnPlayerReady);
         loadOperations = new List<AsyncOperation>();
@@ -50,8 +50,8 @@ public class GameManager : Singleton_MB<GameManager> {
         // Set the number of vertex fo the Line Renderer
         line.positionCount = 2;
     }
-	
-	void Update ()
+
+    void Update()
     {
         execTime += Time.deltaTime;
         if (execTime > timeToSimulate & written)
@@ -65,17 +65,18 @@ public class GameManager : Singleton_MB<GameManager> {
         CS.Build();
         CS.CheckCollisions();
         //CheckNearestNeighbour(PlayerInstance);
-
+        /*
         //Debug.Log(debugGatherer.WholeDebugInfo());
         ColSystemChanged();
         if (!draw)
         {
-            GraphVisualizer.Instance.DrawGraph(CS.GetRoot());
+            DrawGraph();
             draw = true;
         }
+        */
     }
 
-    public ICollisionSystem ColSys { get{ return CS; } }
+    public ICollisionSystem ColSys { get { return CS; } }
     private void GenerateField()
     {
         if (meteorsNum % 2 != 0)
@@ -83,10 +84,10 @@ public class GameManager : Singleton_MB<GameManager> {
 
         List<GameObject> staticObjects = new List<GameObject>();
 
-        for (int i = -meteorsNum/2; i < meteorsNum/2; i++)
+        for (int i = -meteorsNum / 2; i < meteorsNum / 2; i++)
         {
-             for (int j = -meteorsNum/2; j < meteorsNum/2; j++)
-             {
+            for (int j = -meteorsNum / 2; j < meteorsNum / 2; j++)
+            {
                 if (i == 0 && j == 0)
                     continue;
 
@@ -95,7 +96,7 @@ public class GameManager : Singleton_MB<GameManager> {
                 namePart++;
                 CS.Insert(go);
                 staticObjects.Add(go);
-             }
+            }
         }
 
         OnPlayerReady.Invoke(Instantiate(Player));
@@ -177,7 +178,7 @@ public class GameManager : Singleton_MB<GameManager> {
                 col.enabled = true;
                 return (ICollisionSystem)col;
             case CollisionSystems.SweepAndPrune:
-                col = gameObject.GetComponent<SaPCollisionSystem>();      
+                col = gameObject.GetComponent<SaPCollisionSystem>();
                 col.enabled = true;
                 return (ICollisionSystem)col;
             default:
@@ -217,7 +218,7 @@ public class GameManager : Singleton_MB<GameManager> {
 
     private void ColSystemChanged()
     {
-        if(CS.ColSysName != ChooseCollision().ColSysName)
+        if (CS.ColSysName != ChooseCollision().ColSysName)
         {
             CS = null;
             CS = ChooseCollision();
@@ -227,6 +228,11 @@ public class GameManager : Singleton_MB<GameManager> {
     private void HandleOnPlayerReady(GameObject player)
     {
         PlayerInstance = player;
+    }
+
+    public void DrawGraph()
+    {
+        GraphVisualizer.Instance.DrawGraph(CS.GetRoot());
     }
 }
 
@@ -244,3 +250,5 @@ public class GameObjectEvent :  UnityEvent<GameObject> { }
 
 [System.Serializable]
 public class AABBEvent : UnityEvent<AABB> { }
+[System.Serializable]
+public class EmptyEvent : UnityEvent { }
